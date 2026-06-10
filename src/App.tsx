@@ -1,78 +1,83 @@
 import { useState } from 'react';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import QuoteSection from './components/QuoteSection';
-import LoginCard from './components/LoginCard';
-import Dashboard from './components/Dashboard';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import SafeguardingOverview from './pages/SafeguardingOverview';
+import SafeguardingSubpages from './pages/SafeguardingSubpages';
+import OtherPages from './pages/OtherPages';
 
 export default function App() {
   // Authentication State
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loggedInUser, setLoggedInUser] = useState<string>('');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true); // Default true for client preview
+  const [loggedInUser, setLoggedInUser] = useState<string>('Emma Johnson');
 
-  // UI / Alert States
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [alert, setAlert] = useState<{ type: 'error' | 'success'; message: string } | null>(null);
+  // Navigation Routing States
+  const [currentPage, setCurrentPage] = useState<string>('home');
+  const [currentSubpage, setCurrentSubpage] = useState<string>('overview');
+  const [selectedChild, setSelectedChild] = useState<string>('Emma - Year 6');
 
   // Authentication Handlers
   const handleLoginSuccess = (user: string) => {
     setIsAuthenticated(true);
     setLoggedInUser(user);
-    setAlert({ type: 'success', message: 'Successfully authenticated!' });
-  };
-
-  const handleGoogleLogin = () => {
-    setAlert(null);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsAuthenticated(true);
-      setLoggedInUser('Google Scholar');
-      setAlert({ type: 'success', message: 'Signed in with Google!' });
-    }, 800);
+    setCurrentPage('home');
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     setLoggedInUser('');
-    setAlert(null);
   };
 
+  const handlePageChange = (page: string, subpage?: string) => {
+    setCurrentPage(page);
+    if (subpage) {
+      setCurrentSubpage(subpage);
+    } else {
+      setCurrentSubpage('');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return <Login onLoginSuccess={handleLoginSuccess} />;
+  }
+
   return (
-    <>
-      {/* Top Header Navbar */}
-      <Navbar onLogout={handleLogout} setAlert={setAlert} />
+    <div className="app-container">
+      {/* Sidebar Navigation */}
+      <Sidebar 
+        currentPage={currentPage} 
+        currentSubpage={currentSubpage} 
+        onPageChange={handlePageChange} 
+      />
 
-      {/* Main Grid Content Split */}
-      <main className="main-layout">
-        
-        {/* Left Column: Authenticaton Forms */}
-        <section className="form-column">
-          {isAuthenticated ? (
-            <Dashboard 
-              loggedInUser={loggedInUser} 
-              onLogout={handleLogout} 
-              setAlert={setAlert} 
-            />
-          ) : (
-            <LoginCard 
-              onSuccess={handleLoginSuccess}
-              onGoogleLogin={handleGoogleLogin}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              alert={alert}
-              setAlert={setAlert}
-            />
+      {/* Main Content Area */}
+      <main className="app-main">
+        <Header 
+          currentPage={currentPage} 
+          currentSubpage={currentSubpage} 
+          onLogout={handleLogout} 
+          selectedChild={selectedChild}
+          setSelectedChild={setSelectedChild}
+          loggedInUser={loggedInUser}
+        />
+
+        <div className="app-body">
+          {currentPage === 'home' && <Home />}
+
+          {currentPage === 'safeguarding' && currentSubpage === 'overview' && (
+            <SafeguardingOverview onPageChange={handlePageChange} />
           )}
-        </section>
 
-        {/* Right Column: Visual Brand Quote Section */}
-        <QuoteSection />
-        
+          {currentPage === 'safeguarding' && currentSubpage !== 'overview' && (
+            <SafeguardingSubpages subpage={currentSubpage} />
+          )}
+
+          {currentPage !== 'home' && currentPage !== 'safeguarding' && (
+            <OtherPages pageId={currentPage} />
+          )}
+        </div>
       </main>
-
-      {/* Footer Branding & Links */}
-      <Footer setAlert={setAlert} />
-    </>
+    </div>
   );
 }
