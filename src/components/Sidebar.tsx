@@ -52,8 +52,7 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange }: S
       <div className="brand-section">
         <BookOpenCheck className="brand-logo-icon" />
         <div className="brand-title-group">
-          <span className="brand-name">ILMEE</span>
-          <span className="brand-sub">AI-Powered British Portal</span>
+          <span className="brand-sub">AI-Powered British<br/> Curriculum Portal</span>
         </div>
       </div>
 
