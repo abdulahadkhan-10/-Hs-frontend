@@ -330,9 +330,7 @@ export default function ParentStudentLogin({ onLoginSuccess }: LoginProps) {
 
           <div className="hs-login-card">
             <div className="hs-brand">
-              <div className="hs-brand-mark">
-                <BookOpen size={24} color="#fff" />
-              </div>
+              <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
               <span className="hs-brand-name">ILMEE</span>
               <span className="hs-brand-sub">Homeschooling Portal</span>
             </div>

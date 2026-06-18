@@ -350,9 +350,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         {/* ── NAV ── */}
         <header className="ilm-nav">
           <div className="ilm-nav-logo">
-            <div className="ilm-logo-mark">
-              <GraduationCap size={18} color="#fff" />
-            </div>
+            <img src="/ilmee_logo.png" alt="ILMEE Logo" className="ilm-logo-img" style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'contain' }} />
             <div>
               <span className="ilm-brand-name">ILMEE</span>
               <span className="ilm-brand-tag">Educational Portals</span>

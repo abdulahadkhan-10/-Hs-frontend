@@ -26,10 +26,7 @@ export default function GuardLogin({ onLoginSuccess }: LoginProps) {
     }, 800);
   };
 
-  const goBack = () => {
-    window.history.pushState({}, '', '/');
-    window.dispatchEvent(new PopStateEvent('popstate'));
-  };
+ 
 
   return (
     <>
@@ -172,17 +169,13 @@ export default function GuardLogin({ onLoginSuccess }: LoginProps) {
         <div className="gd-bg-blob-1" />
         <div className="gd-bg-blob-2" />
 
-        <button className="gd-back" onClick={goBack}>
-          <ChevronLeft size={15} /> Back to home
-        </button>
+        
 
         <div className="gd-card">
           <div className="gd-card-top-bar" />
 
           <div className="gd-brand">
-            <div className="gd-brand-mark">
-              <Shield size={26} color="#fff" />
-            </div>
+            <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
             <span className="gd-brand-name">ILMEE</span>
             <span className="gd-brand-sub">Guard / Security Portal</span>
           </div>

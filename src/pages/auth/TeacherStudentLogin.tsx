@@ -320,9 +320,7 @@ export default function TeacherStudentLogin({ onLoginSuccess }: LoginProps) {
 
           <div className="tn-login-card">
             <div className="tn-brand">
-              <div className="tn-brand-mark">
-                <BookOpen size={24} color="#a0bcd8" />
-              </div>
+              <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
               <span className="tn-brand-name">ILMEE</span>
               <span className="tn-brand-sub">Tuition Portal</span>
             </div>

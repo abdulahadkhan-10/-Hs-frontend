@@ -286,9 +286,7 @@ export default function ParentRegistration({ onRegisterSuccess }: RegisterProps)
 
           <div className="pr-register-card">
             <div className="pr-brand">
-              <div className="pr-brand-mark">
-                <BookOpen size={24} color="#fff" />
-              </div>
+              <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
               <span className="pr-brand-name">ILMEE</span>
               <span className="pr-brand-sub">Parent Registration</span>
             </div>

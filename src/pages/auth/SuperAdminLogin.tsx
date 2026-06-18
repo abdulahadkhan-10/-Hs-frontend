@@ -26,10 +26,7 @@ export default function SuperAdminLogin({ onLoginSuccess }: LoginProps) {
     }, 800);
   };
 
-  const goBack = () => {
-    window.history.pushState({}, '', '/');
-    window.dispatchEvent(new PopStateEvent('popstate'));
-  };
+
 
   return (
     <>
@@ -211,15 +208,11 @@ export default function SuperAdminLogin({ onLoginSuccess }: LoginProps) {
 
         {/* LEFT */}
         <div className="sa-login-left">
-          <button className="sa-back" onClick={goBack}>
-            <ChevronLeft size={15} /> Back to home
-          </button>
+         
 
           <div className="sa-card">
             <div className="sa-brand">
-              <div className="sa-brand-mark">
-                <ShieldCheck size={26} color="#fff" />
-              </div>
+              <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
               <span className="sa-brand-name">ILMEE</span>
               <span className="sa-brand-sub">Super Admin Portal</span>
             </div>
