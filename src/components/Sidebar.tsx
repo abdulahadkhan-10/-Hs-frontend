@@ -14,8 +14,7 @@ import {
   ShieldCheck, 
   Settings, 
   ChevronRight, 
-  HelpCircle,
-  BookOpenCheck
+  HelpCircle
 } from 'lucide-react';
 
 interface SidebarProps {

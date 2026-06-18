@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   BookOpen,
-  GraduationCap,
   Shield,
   ArrowRight,
   Sparkles,
