@@ -52,7 +52,7 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange }: S
         <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '32px', height: '32px', borderRadius: '8px', objectFit: 'contain' }} />
         <div className="brand-title-group">
           <span className="brand-name">ILMEE</span>
-          <span className="brand-sub">AI-Powered British<br/> Curriculum Portal</span>
+          <span className="brand-sub">AI-Powered<br/> Curriculum Portal</span>
         </div>
       </div>
 
