@@ -10,6 +10,9 @@ export default function SchoolRegistration({ onRegisterSuccess }: RegistrationPr
     schoolName: '',
     schoolKey: '',
     address: '',
+    city: '',
+    state: '',
+    postalCode: '',
     region: '',
     email: '',
     password: '',
@@ -244,15 +247,63 @@ export default function SchoolRegistration({ onRegisterSuccess }: RegistrationPr
               </div>
 
               <div className="sch-reg-field full">
-                <label className="sch-reg-label">Address (Optional)</label>
+                <label className="sch-reg-label">Street Address (Optional)</label>
                 <div className="sch-reg-input-wrap">
                   <MapPin size={15} className="sch-reg-input-icon" />
                   <input
                     type="text"
                     name="address"
                     className="sch-reg-input"
-                    placeholder="Full address of the institution"
+                    placeholder="e.g. 123 Main Street"
                     value={formData.address}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+
+              <div className="sch-reg-field">
+                <label className="sch-reg-label">City (Optional)</label>
+                <div className="sch-reg-input-wrap">
+                  <Building size={15} className="sch-reg-input-icon" />
+                  <input
+                    type="text"
+                    name="city"
+                    className="sch-reg-input"
+                    placeholder="e.g. London / Cairo"
+                    value={formData.city}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+
+              <div className="sch-reg-field">
+                <label className="sch-reg-label">State / Governorate (Optional)</label>
+                <div className="sch-reg-input-wrap">
+                  <Globe size={15} className="sch-reg-input-icon" />
+                  <input
+                    type="text"
+                    name="state"
+                    className="sch-reg-input"
+                    placeholder="e.g. Greater London / Giza"
+                    value={formData.state}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+
+              <div className="sch-reg-field full">
+                <label className="sch-reg-label">Postal / Zip Code (Optional)</label>
+                <div className="sch-reg-input-wrap">
+                  <Key size={15} className="sch-reg-input-icon" />
+                  <input
+                    type="text"
+                    name="postalCode"
+                    className="sch-reg-input"
+                    placeholder="e.g. W1A 1AA / 11511"
+                    value={formData.postalCode}
                     onChange={handleChange}
                     disabled={isLoading}
                   />
