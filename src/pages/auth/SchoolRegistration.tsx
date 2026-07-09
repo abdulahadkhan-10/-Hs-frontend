@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { School, Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft, Building, Key, MapPin, Globe } from 'lucide-react';
+import { Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft, Building, Key, MapPin, Globe } from 'lucide-react';
 import { useRegisterSchoolMutation } from '../../store/api/authApi';
 
 interface RegistrationProps {

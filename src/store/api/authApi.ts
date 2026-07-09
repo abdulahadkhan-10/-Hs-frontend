@@ -28,7 +28,8 @@ export interface RegisterSchoolRequest {
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
+  tagTypes: ['User'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, any>({
       query: (credentials) => ({
@@ -36,6 +37,7 @@ export const authApi = createApi({
         method: 'POST',
         body: credentials,
       }),
+      invalidatesTags: ['User'],
     }),
     registerSchool: builder.mutation<any, RegisterSchoolRequest>({
       query: (schoolData) => ({
@@ -43,6 +45,7 @@ export const authApi = createApi({
         method: 'POST',
         body: schoolData,
       }),
+      invalidatesTags: ['User'],
     }),
     registerTeacher: builder.mutation<any, any>({
       query: (teacherData) => ({
@@ -50,6 +53,7 @@ export const authApi = createApi({
         method: 'POST',
         body: teacherData,
       }),
+      invalidatesTags: ['User'],
     }),
     registerStudent: builder.mutation<any, any>({
       query: (studentData) => ({
@@ -57,6 +61,11 @@ export const authApi = createApi({
         method: 'POST',
         body: studentData,
       }),
+      invalidatesTags: ['User'],
+    }),
+    getMe: builder.query<any, void>({
+      query: () => 'auth/me',
+      providesTags: ['User'],
     }),
   }),
 });
@@ -66,4 +75,5 @@ export const {
   useRegisterSchoolMutation,
   useRegisterTeacherMutation,
   useRegisterStudentMutation,
+  useGetMeQuery,
 } = authApi;

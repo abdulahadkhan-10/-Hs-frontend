@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './store';
+import { setCredentials, logout } from './store/slices/authSlice';
+import { useGetMeQuery } from './store/api/authApi';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -16,9 +20,23 @@ import SuperAdminLogin from './pages/auth/SuperAdminLogin';
 import SafeguardLogin from './pages/auth/SafeguardLogin';
 
 export default function App() {
-  // Authentication State
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loggedInUser, setLoggedInUser] = useState<string>('');
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+
+  // Call getMe query to load session automatically if authenticated state in slice is set from localStorage
+  const { data: meData, error: meError } = useGetMeQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+
+  useEffect(() => {
+    if (meData?.user) {
+      dispatch(setCredentials({ user: meData.user, token: localStorage.getItem('auth_token') || '' }));
+    } else if (meError) {
+      dispatch(logout());
+    }
+  }, [meData, meError, dispatch]);
+
+  const loggedInUser = user?.profile?.schoolName || user?.profile?.name || user?.email || '';
 
   // Simple state-based routing for Auth URLs
   const [authRoute, setAuthRoute] = useState<string>(window.location.pathname);
@@ -38,17 +56,13 @@ export default function App() {
   }, []);
 
   // Authentication Handlers
-  const handleLoginSuccess = (user: string, _role: string) => {
-    setIsAuthenticated(true);
-    setLoggedInUser(user);
+  const handleLoginSuccess = (_userVal: string, _role: string) => {
     setCurrentPage('home');
-    // Clear URL to root purely for visual consistency in our mock
     window.history.pushState({}, '', '/');
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    setLoggedInUser('');
+    dispatch(logout());
     window.history.pushState({}, '', '/');
     setAuthRoute('/');
   };
@@ -61,12 +75,13 @@ export default function App() {
       setCurrentSubpage('');
     }
   };
+
   if (!isAuthenticated) {
     if (authRoute === '/login-school') {
       return <SchoolLogin onLoginSuccess={handleLoginSuccess} />;
     }
     if (authRoute === '/register-school') {
-      return <SchoolRegistration onRegisterSuccess={(user) => handleLoginSuccess(user, 'school')} />;
+      return <SchoolRegistration onRegisterSuccess={(userVal) => handleLoginSuccess(userVal, 'school')} />;
     }
     if (authRoute === '/login-teacher') {
       return <TeacherLogin onLoginSuccess={handleLoginSuccess} />;

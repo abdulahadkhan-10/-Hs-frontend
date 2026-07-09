@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { GraduationCap, User, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft } from 'lucide-react';
+import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../store/api/authApi';
+import { setCredentials } from '../../store/slices/authSlice';
 
 interface LoginProps {
   onLoginSuccess: (username: string, role: string) => void;
 }
 
 export default function StudentLogin({ onLoginSuccess }: LoginProps) {
+  const dispatch = useDispatch();
   const [login, { isLoading, error, data }] = useLoginMutation();
 
   const [email, setEmail] = useState('');
@@ -15,9 +18,10 @@ export default function StudentLogin({ onLoginSuccess }: LoginProps) {
 
   useEffect(() => {
     if (data) {
+      dispatch(setCredentials({ user: data.user, token: data.token }));
       onLoginSuccess(data.user.profile?.name || data.user.email.split('@')[0], 'student');
     }
-  }, [data, onLoginSuccess]);
+  }, [data, onLoginSuccess, dispatch]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

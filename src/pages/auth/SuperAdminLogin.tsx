@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
 interface LoginProps {
   onLoginSuccess: (username: string, role: string) => void;

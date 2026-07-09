@@ -5,7 +5,6 @@ import {
   ArrowRight,
   Sparkles,
   School,
-  CheckCircle,
   ChevronDown,
   BarChart,
   FileText,
