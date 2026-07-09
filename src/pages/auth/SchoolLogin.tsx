@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { School, Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft } from 'lucide-react';
+import { useLoginMutation } from '../../store/api/authApi';
 
 interface LoginProps {
   onLoginSuccess: (username: string, role: string) => void;
 }
 
 export default function SchoolLogin({ onLoginSuccess }: LoginProps) {
+  const [login, { isLoading, error, data }] = useLoginMutation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (data) {
+      onLoginSuccess(data.user.profile?.schoolName || data.user.email.split('@')[0], 'school');
+    }
+  }, [data, onLoginSuccess]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      if (email.trim() && password.length >= 4) {
-        onLoginSuccess(email.split('@')[0], 'school');
-      } else {
-        setError('Invalid credentials. Please try again.');
-      }
-    }, 800);
+    try {
+      await login({ email, password }).unwrap();
+    } catch (err: any) {
+      // Errors handled by RTK Query state
+    }
   };
 
   const goBack = () => {
@@ -198,7 +200,7 @@ export default function SchoolLogin({ onLoginSuccess }: LoginProps) {
             {error && (
               <div className="sch-error">
                 <AlertTriangle size={15} />
-                <span>{error}</span>
+                <span>{(error as any)?.data?.error || 'Invalid credentials. Please try again.'}</span>
               </div>
             )}
 

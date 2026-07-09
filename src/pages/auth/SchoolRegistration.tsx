@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { School, Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft, Building, Key, MapPin, Globe } from 'lucide-react';
+import { useRegisterSchoolMutation } from '../../store/api/authApi';
 
 interface RegistrationProps {
   onRegisterSuccess: (username: string, role: string) => void;
 }
 
 export default function SchoolRegistration({ onRegisterSuccess }: RegistrationProps) {
+  const [registerSchool, { isLoading, error, isSuccess }] = useRegisterSchoolMutation();
+
   const [formData, setFormData] = useState({
     schoolName: '',
     schoolKey: '',
@@ -18,29 +21,32 @@ export default function SchoolRegistration({ onRegisterSuccess }: RegistrationPr
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isSuccess) {
+      onRegisterSuccess(formData.schoolName, 'school');
+    }
+  }, [isSuccess, onRegisterSuccess, formData.schoolName]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+    setLocalError(null);
 
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long.');
-      setIsLoading(false);
+      setLocalError('Password must be at least 8 characters long.');
       return;
     }
 
-    setTimeout(() => {
-      setIsLoading(false);
-      // Simulate successful registration, but the account will be pending approval in reality
-      onRegisterSuccess(formData.schoolName, 'school');
-    }, 1200);
+    try {
+      await registerSchool(formData).unwrap();
+    } catch (err: any) {
+      // Errors handled by the query error state
+    }
   };
 
   const goBack = () => {
@@ -204,10 +210,10 @@ export default function SchoolRegistration({ onRegisterSuccess }: RegistrationPr
             <h2 className="sch-reg-heading">School Registration</h2>
             <p className="sch-reg-sub">Register your institution to access the LSA Portal</p>
 
-            {error && (
+            {(error || localError) && (
               <div className="sch-reg-error">
                 <AlertTriangle size={15} />
-                <span>{error}</span>
+                <span>{localError || (error as any)?.data?.error || 'An error occurred'}</span>
               </div>
             )}
 

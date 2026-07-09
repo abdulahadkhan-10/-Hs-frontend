@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GraduationCap, User, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft } from 'lucide-react';
+import { useLoginMutation } from '../../store/api/authApi';
 
 interface LoginProps {
   onLoginSuccess: (username: string, role: string) => void;
 }
 
 export default function StudentLogin({ onLoginSuccess }: LoginProps) {
-  const [username, setUsername] = useState('');
+  const [login, { isLoading, error, data }] = useLoginMutation();
+
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (data) {
+      onLoginSuccess(data.user.profile?.name || data.user.email.split('@')[0], 'student');
+    }
+  }, [data, onLoginSuccess]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      if (username.trim() && password.length >= 4) {
-        onLoginSuccess(username, 'student');
-      } else {
-        setError('Invalid credentials. Please try again.');
-      }
-    }, 800);
+    try {
+      await login({ email, password }).unwrap();
+    } catch (err: any) {
+      // Errors handled by RTK Query state
+    }
   };
 
   const goBack = () => {
@@ -190,21 +192,21 @@ export default function StudentLogin({ onLoginSuccess }: LoginProps) {
             {error && (
               <div className="stu-error">
                 <AlertTriangle size={15} />
-                <span>{error}</span>
+                <span>{(error as any)?.data?.error || 'Invalid credentials. Please try again.'}</span>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="stu-form">
               <div className="stu-field">
-                <label className="stu-label">Username</label>
+                <label className="stu-label">Email address</label>
                 <div className="stu-input-wrap">
                   <User size={15} className="stu-input-icon" />
                   <input
-                    type="text"
+                    type="email"
                     className="stu-input"
-                    placeholder="student-username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="student@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     disabled={isLoading}
                     required
                   />
