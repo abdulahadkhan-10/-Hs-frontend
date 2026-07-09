@@ -8,11 +8,12 @@ import OtherPages from './pages/OtherPages';
 
 // Auth Pages
 import LandingPage from './pages/LandingPage';
-import ParentStudentLogin from './pages/auth/ParentStudentLogin';
-import TeacherStudentLogin from './pages/auth/TeacherStudentLogin';
+import SchoolLogin from './pages/auth/SchoolLogin';
+import SchoolRegistration from './pages/auth/SchoolRegistration';
+import TeacherLogin from './pages/auth/TeacherLogin';
+import StudentLogin from './pages/auth/StudentLogin';
 import SuperAdminLogin from './pages/auth/SuperAdminLogin';
-import GuardLogin from './pages/auth/GuardLogin';
-import ParentRegistration from './pages/auth/ParentRegistration';
+import SafeguardLogin from './pages/auth/SafeguardLogin';
 
 export default function App() {
   // Authentication State
@@ -60,22 +61,24 @@ export default function App() {
       setCurrentSubpage('');
     }
   };
-
   if (!isAuthenticated) {
-    if (authRoute === '/login-hs') {
-      return <ParentStudentLogin onLoginSuccess={handleLoginSuccess} />;
+    if (authRoute === '/login-school') {
+      return <SchoolLogin onLoginSuccess={handleLoginSuccess} />;
     }
-    if (authRoute === '/login-tutn') {
-      return <TeacherStudentLogin onLoginSuccess={handleLoginSuccess} />;
+    if (authRoute === '/register-school') {
+      return <SchoolRegistration onRegisterSuccess={(user) => handleLoginSuccess(user, 'school')} />;
+    }
+    if (authRoute === '/login-teacher') {
+      return <TeacherLogin onLoginSuccess={handleLoginSuccess} />;
+    }
+    if (authRoute === '/login-student') {
+      return <StudentLogin onLoginSuccess={handleLoginSuccess} />;
+    }
+    if (authRoute === '/login-safeguard') {
+      return <SafeguardLogin onLoginSuccess={handleLoginSuccess} />;
     }
     if (authRoute === '/login-sa') {
       return <SuperAdminLogin onLoginSuccess={handleLoginSuccess} />;
-    }
-    if (authRoute === '/login-guard') {
-      return <GuardLogin onLoginSuccess={handleLoginSuccess} />;
-    }
-    if (authRoute === '/register-hs') {
-      return <ParentRegistration onRegisterSuccess={(user) => handleLoginSuccess(user, 'parent')} />;
     }
     // Default fallback is the new Landing Page
     return <LandingPage onNavigate={setAuthRoute} />;

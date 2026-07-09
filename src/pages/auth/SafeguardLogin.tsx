@@ -5,7 +5,7 @@ interface LoginProps {
   onLoginSuccess: (username: string, role: string) => void;
 }
 
-export default function GuardLogin({ onLoginSuccess }: LoginProps) {
+export default function SafeguardLogin({ onLoginSuccess }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,14 +19,17 @@ export default function GuardLogin({ onLoginSuccess }: LoginProps) {
     setTimeout(() => {
       setIsLoading(false);
       if (email.trim() && password.length >= 6) {
-        onLoginSuccess(email.split('@')[0], 'guard');
+        onLoginSuccess(email.split('@')[0], 'safeguard');
       } else {
         setError('Invalid credentials. Please check your Guard ID and password.');
       }
     }, 800);
   };
 
- 
+  const goBack = () => {
+    window.history.pushState({}, '', '/');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
 
   return (
     <>
@@ -168,8 +171,9 @@ export default function GuardLogin({ onLoginSuccess }: LoginProps) {
       <div className="gd-login-page">
         <div className="gd-bg-blob-1" />
         <div className="gd-bg-blob-2" />
-
-        
+        <button className="gd-back" onClick={goBack}>
+          <ChevronLeft size={16} /> Back to home
+        </button>
 
         <div className="gd-card">
           <div className="gd-card-top-bar" />

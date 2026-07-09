@@ -396,56 +396,71 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
 
 
-        {/* ── PORTALS ── */}
+        {/* ── ROLES ── */}
         <section id="portals" className="ilm-section ilm-portals-bg">
           <div className="ilm-container">
             <div className="ilm-section-hdr">
-              <p className="ilm-section-label">Select your programme</p>
-              <h2 className="ilm-section-title">Two portals. One unified platform.</h2>
+              <p className="ilm-section-label">LSA Portal Access</p>
+              <h2 className="ilm-section-title">Select your role to continue</h2>
               <p className="ilm-section-desc">
-                Choose the learning structure that suits your family. Both portals share
-                real-time reporting, instant progress logs, and compliance-first design.
+                Log in to access your tailored dashboard for the Tuition portal.
               </p>
             </div>
-            <div className="ilm-portals-grid">
+            <div className="ilm-portals-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
 
-              {/* Homeschooling */}
-              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-hs')}>
+              {/* School */}
+              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-school')}>
                 <div className="ilm-portal-top-bar bar-green" />
                 <div className="ilm-portal-icon green"><School size={22} /></div>
-                <span className="ilm-portal-tag green">Homeschooling</span>
-                <h3>Homeschooling Portal</h3>
+                <span className="ilm-portal-tag green">School Administration</span>
+                <h3>School Portal</h3>
                 <p>
-                  A complete full-time curriculum solution for parents directing their child's
-                  learning. Manage daily lesson slots, wellbeing logs, and compile local-authority portfolios.
+                  Manage your institution's tuition schedules, oversee teachers, and track overall student progress.
                 </p>
-                <ul className="ilm-portal-features">
-                  {['Structured 39-week termly plans', 'Comprehensive parent reporting', 'Child progress visualisers', 'Digital evidence folder uploads'].map((f) => (
-                    <li key={f} className="green"><CheckCircle size={14} /> {f}</li>
-                  ))}
-                </ul>
                 <span className="ilm-portal-link green">
-                  Access homeschooling portal <ArrowRight size={14} />
+                  School login / Register <ArrowRight size={14} />
                 </span>
               </div>
 
-              {/* Tuition */}
-              <div className="ilm-portal-card tuition" onClick={() => handleSelectPortal('/login-tutn')}>
-                <div className="ilm-portal-top-bar bar-blue" />
-                <div className="ilm-portal-icon blue"><BookOpen size={22} /></div>
-                <span className="ilm-portal-tag blue">Tuition</span>
-                <h3>Tuition Portal</h3>
+              {/* Teacher */}
+              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-teacher')}>
+                <div className="ilm-portal-top-bar bar-amber" style={{ background: 'linear-gradient(90deg, #c06d48, #e38c64)' }} />
+                <div className="ilm-portal-icon amber" style={{ background: '#faf7f0', color: '#c06d48' }}><BookOpen size={22} /></div>
+                <span className="ilm-portal-tag amber" style={{ background: '#faf7f0', color: '#c06d48' }}>Educator</span>
+                <h3>Teacher Portal</h3>
                 <p>
-                  After-school and supplementary tutoring with DBS-checked specialists.
-                  Connect via live sessions, track assignments, and share feedback with parents directly.
+                  Access your teaching schedule, upload lesson materials, and provide feedback to students directly.
                 </p>
-                <ul className="ilm-portal-features">
-                  {['Teacher & student dashboards', 'Live virtual session logs', 'Assignment & homework tracking', 'Secure parent-tutor messaging'].map((f) => (
-                    <li key={f} className="blue"><CheckCircle size={14} /> {f}</li>
-                  ))}
-                </ul>
+                <span className="ilm-portal-link amber" style={{ color: '#c06d48' }}>
+                  Teacher login <ArrowRight size={14} />
+                </span>
+              </div>
+
+              {/* Student */}
+              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-student')}>
+                <div className="ilm-portal-top-bar bar-blue" />
+                <div className="ilm-portal-icon blue"><BarChart size={22} /></div>
+                <span className="ilm-portal-tag blue">Learner</span>
+                <h3>Student Portal</h3>
+                <p>
+                  Join live tuition sessions, track your assignments, and review feedback from your teachers.
+                </p>
                 <span className="ilm-portal-link blue">
-                  Access tuition portal <ArrowRight size={14} />
+                  Student login <ArrowRight size={14} />
+                </span>
+              </div>
+
+              {/* Safeguard */}
+              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-safeguard')}>
+                <div className="ilm-portal-top-bar bar-red" style={{ background: 'linear-gradient(90deg, #a03030, #dc2626)' }} />
+                <div className="ilm-portal-icon red" style={{ background: '#fce8e8', color: '#a03030' }}><Shield size={22} /></div>
+                <span className="ilm-portal-tag red" style={{ background: '#fce8e8', color: '#a03030' }}>Security</span>
+                <h3>Safeguarding Portal</h3>
+                <p>
+                  Monitor daily wellbeing logs and oversee immediate concern escalations securely.
+                </p>
+                <span className="ilm-portal-link red" style={{ color: '#a03030' }}>
+                  Safeguard login <ArrowRight size={14} />
                 </span>
               </div>
 
@@ -548,15 +563,15 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <section className="ilm-cta-bottom">
           <h2>Ready to transform your educational experience?</h2>
           <p>
-            Join thousands of families, teachers, and students across the UK and Egypt
-            delivering high-quality, compliant British National Curriculum education through ILMEE.
+            Join thousands of schools, teachers, and students across the UK and Egypt
+            delivering high-quality, compliant tuition through ILMEE.
           </p>
           <div className="ilm-cta-bottom-btns">
-            <button className="ilm-btn-gold" onClick={() => handleSelectPortal('/login-hs')}>
-              Homeschooling login
+            <button className="ilm-btn-gold" onClick={() => handleSelectPortal('/login-school')}>
+              School login
             </button>
-            <button className="ilm-btn-outline-light" onClick={() => handleSelectPortal('/login-tutn')}>
-              Tuition login
+            <button className="ilm-btn-outline-light" onClick={() => handleSelectPortal('/register-school')}>
+              Register a school
             </button>
           </div>
         </section>
@@ -573,9 +588,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
             <div className="ilm-footer-col">
               <span className="ilm-footer-col-title">Portals</span>
-              <a href="/login-hs" onClick={(e) => { e.preventDefault(); handleSelectPortal('/login-hs'); }}>Homeschooling login</a>
-              <a href="/login-tutn" onClick={(e) => { e.preventDefault(); handleSelectPortal('/login-tutn'); }}>Tuition login</a>
-              <a href="/register-hs" onClick={(e) => { e.preventDefault(); handleSelectPortal('/register-hs'); }}>Parent registration</a>
+              <a href="/login-school" onClick={(e) => { e.preventDefault(); handleSelectPortal('/login-school'); }}>School Portal</a>
+              <a href="/login-teacher" onClick={(e) => { e.preventDefault(); handleSelectPortal('/login-teacher'); }}>Teacher Portal</a>
+              <a href="/login-student" onClick={(e) => { e.preventDefault(); handleSelectPortal('/login-student'); }}>Student Portal</a>
+              <a href="/login-safeguard" onClick={(e) => { e.preventDefault(); handleSelectPortal('/login-safeguard'); }}>Safeguard Portal</a>
             </div>
 
           </div>
