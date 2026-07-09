@@ -189,58 +189,55 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
         /* ── PORTALS ── */
         .ilm-portals-bg { background: #f7f5ef; }
-        .ilm-portals-grid {
-          display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+        .ilm-portals-list {
+          display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+          max-width: 1000px; margin: 0 auto;
         }
-        @media (max-width: 640px) { .ilm-portals-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 860px) { .ilm-portals-list { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { .ilm-portals-list { grid-template-columns: 1fr; } }
 
-        .ilm-portal-card {
-          background: #fff; border: 1.5px solid #dfdacd; border-radius: 14px;
-          padding: 2rem; cursor: pointer; position: relative; overflow: hidden;
-          transition: border-color 0.18s, transform 0.18s;
+        .ilm-portal-row {
+          background: #fff; border: 1.5px solid #dfdacd; border-radius: 12px;
+          padding: 2rem 1.5rem; cursor: pointer; position: relative; overflow: hidden;
+          transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+          display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem;
         }
-        .ilm-portal-card:hover { border-color: #506e4d; transform: translateY(-2px); }
-        .ilm-portal-card.tuition:hover { border-color: #1a3566; }
-
-        .ilm-portal-top-bar {
-          position: absolute; top: 0; left: 0; right: 0; height: 3px;
-          opacity: 0; transition: opacity 0.18s; border-radius: 14px 14px 0 0;
+        .ilm-portal-row:hover { 
+          border-color: #506e4d; 
+          transform: translateY(-4px);
+          box-shadow: 0 12px 30px -8px rgba(0,0,0,0.08);
         }
-        .ilm-portal-card:hover .ilm-portal-top-bar { opacity: 1; }
-        .bar-green { background: linear-gradient(90deg, #506e4d, #728c6f); }
-        .bar-blue  { background: linear-gradient(90deg, #1a3566, #4a70c8); }
+        .ilm-portal-row.blue:hover { border-color: #1a3566; }
+        .ilm-portal-row.amber:hover { border-color: #c06d48; }
+        .ilm-portal-row.red:hover { border-color: #a03030; }
 
         .ilm-portal-icon {
-          width: 46px; height: 46px; border-radius: 11px;
-          display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;
+          width: 56px; height: 56px; border-radius: 14px;
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+          margin-bottom: 0.5rem;
         }
         .ilm-portal-icon.green { background: #f0ede4; color: #506e4d; }
         .ilm-portal-icon.blue  { background: #e8edf8; color: #1a3566; }
+        .ilm-portal-icon.amber { background: #faf7f0; color: #c06d48; }
+        .ilm-portal-icon.red   { background: #fce8e8; color: #a03030; }
 
-        .ilm-portal-tag {
-          display: inline-block; font-size: 10px; letter-spacing: 0.12em;
-          text-transform: uppercase; font-weight: 600; padding: 3px 10px;
-          border-radius: 20px; margin-bottom: 0.75rem;
+        .ilm-portal-content { flex: 1; display: flex; flex-direction: column; }
+        .ilm-portal-row h3 { font-size: 16px; font-weight: 700; color: #2b352a; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+        .ilm-portal-row p  { font-size: 13px; color: #5a6557; line-height: 1.5; margin: 0; flex: 1; }
+
+        .ilm-portal-action {
+          display: flex; align-items: center; justify-content: center;
+          width: 32px; height: 32px; border-radius: 50%;
+          background: #f7f5ef; color: #7b8878; flex-shrink: 0;
+          transition: background 0.18s, color 0.18s;
+          margin-top: 1rem;
         }
-        .ilm-portal-tag.green { background: #f0ede4; color: #506e4d; }
-        .ilm-portal-tag.blue  { background: #e8edf8; color: #1a3566; }
-
-        .ilm-portal-card h3 { font-size: 18px; font-weight: 700; color: #2b352a; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
-        .ilm-portal-card p  { font-size: 13.5px; color: #5a6557; line-height: 1.65; margin-bottom: 1.25rem; }
-
-        .ilm-portal-features { list-style: none; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 7px; }
-        .ilm-portal-features li { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #3b4539; }
-        .ilm-portal-features li.green svg { color: #506e4d; }
-        .ilm-portal-features li.blue  svg { color: #1a3566; }
-
-        .ilm-portal-link {
-          display: inline-flex; align-items: center; gap: 6px;
-          font-size: 13px; font-weight: 600; text-decoration: none;
-          transition: gap 0.15s;
+        .ilm-portal-row:hover .ilm-portal-action {
+          background: #506e4d; color: #fff;
         }
-        .ilm-portal-link.green { color: #506e4d; }
-        .ilm-portal-link.blue  { color: #1a3566; }
-        .ilm-portal-card:hover .ilm-portal-link { gap: 10px; }
+        .ilm-portal-row.blue:hover .ilm-portal-action { background: #1a3566; }
+        .ilm-portal-row.amber:hover .ilm-portal-action { background: #c06d48; }
+        .ilm-portal-row.red:hover .ilm-portal-action { background: #a03030; }
 
         /* ── STATS BAND ── */
         .ilm-stats { background: #2b352a; padding: 3rem 2rem; border-top: 1px solid #dfdacd; border-bottom: 1px solid #dfdacd; }
@@ -399,71 +396,54 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         {/* ── ROLES ── */}
         <section id="portals" className="ilm-section ilm-portals-bg">
           <div className="ilm-container">
-            <div className="ilm-section-hdr">
+            <div className="ilm-section-hdr" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 2.5rem' }}>
               <p className="ilm-section-label">LSA Portal Access</p>
               <h2 className="ilm-section-title">Select your role to continue</h2>
-              <p className="ilm-section-desc">
+              <p className="ilm-section-desc" style={{ margin: '0 auto' }}>
                 Log in to access your tailored dashboard for the Tuition portal.
               </p>
             </div>
-            <div className="ilm-portals-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-
+            
+            <div className="ilm-portals-list">
               {/* School */}
-              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-school')}>
-                <div className="ilm-portal-top-bar bar-green" />
-                <div className="ilm-portal-icon green"><School size={22} /></div>
-                <span className="ilm-portal-tag green">School Administration</span>
-                <h3>School Portal</h3>
-                <p>
-                  Manage your institution's tuition schedules, oversee teachers, and track overall student progress.
-                </p>
-                <span className="ilm-portal-link green">
-                  School login / Register <ArrowRight size={14} />
-                </span>
+              <div className="ilm-portal-row green" onClick={() => handleSelectPortal('/login-school')}>
+                <div className="ilm-portal-icon green"><School size={24} /></div>
+                <div className="ilm-portal-content">
+                  <h3>School Administration</h3>
+                  <p>Manage your institution's tuition schedules, oversee teachers, and track overall student progress.</p>
+                </div>
+                <div className="ilm-portal-action"><ArrowRight size={16} /></div>
               </div>
 
               {/* Teacher */}
-              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-teacher')}>
-                <div className="ilm-portal-top-bar bar-amber" style={{ background: 'linear-gradient(90deg, #c06d48, #e38c64)' }} />
-                <div className="ilm-portal-icon amber" style={{ background: '#faf7f0', color: '#c06d48' }}><BookOpen size={22} /></div>
-                <span className="ilm-portal-tag amber" style={{ background: '#faf7f0', color: '#c06d48' }}>Educator</span>
-                <h3>Teacher Portal</h3>
-                <p>
-                  Access your teaching schedule, upload lesson materials, and provide feedback to students directly.
-                </p>
-                <span className="ilm-portal-link amber" style={{ color: '#c06d48' }}>
-                  Teacher login <ArrowRight size={14} />
-                </span>
+              <div className="ilm-portal-row amber" onClick={() => handleSelectPortal('/login-teacher')}>
+                <div className="ilm-portal-icon amber"><BookOpen size={24} /></div>
+                <div className="ilm-portal-content">
+                  <h3>Teacher Portal</h3>
+                  <p>Access your teaching schedule, upload lesson materials, and provide feedback directly to students.</p>
+                </div>
+                <div className="ilm-portal-action"><ArrowRight size={16} /></div>
               </div>
 
               {/* Student */}
-              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-student')}>
-                <div className="ilm-portal-top-bar bar-blue" />
-                <div className="ilm-portal-icon blue"><BarChart size={22} /></div>
-                <span className="ilm-portal-tag blue">Learner</span>
-                <h3>Student Portal</h3>
-                <p>
-                  Join live tuition sessions, track your assignments, and review feedback from your teachers.
-                </p>
-                <span className="ilm-portal-link blue">
-                  Student login <ArrowRight size={14} />
-                </span>
+              <div className="ilm-portal-row blue" onClick={() => handleSelectPortal('/login-student')}>
+                <div className="ilm-portal-icon blue"><BarChart size={24} /></div>
+                <div className="ilm-portal-content">
+                  <h3>Student Portal</h3>
+                  <p>Join live tuition sessions, track your assignments, and review feedback from your teachers.</p>
+                </div>
+                <div className="ilm-portal-action"><ArrowRight size={16} /></div>
               </div>
 
               {/* Safeguard */}
-              <div className="ilm-portal-card" onClick={() => handleSelectPortal('/login-safeguard')}>
-                <div className="ilm-portal-top-bar bar-red" style={{ background: 'linear-gradient(90deg, #a03030, #dc2626)' }} />
-                <div className="ilm-portal-icon red" style={{ background: '#fce8e8', color: '#a03030' }}><Shield size={22} /></div>
-                <span className="ilm-portal-tag red" style={{ background: '#fce8e8', color: '#a03030' }}>Security</span>
-                <h3>Safeguarding Portal</h3>
-                <p>
-                  Monitor daily wellbeing logs and oversee immediate concern escalations securely.
-                </p>
-                <span className="ilm-portal-link red" style={{ color: '#a03030' }}>
-                  Safeguard login <ArrowRight size={14} />
-                </span>
+              <div className="ilm-portal-row red" onClick={() => handleSelectPortal('/login-safeguard')}>
+                <div className="ilm-portal-icon red"><Shield size={24} /></div>
+                <div className="ilm-portal-content">
+                  <h3>Safeguarding Portal</h3>
+                  <p>Monitor daily wellbeing logs and oversee immediate concern escalations securely.</p>
+                </div>
+                <div className="ilm-portal-action"><ArrowRight size={16} /></div>
               </div>
-
             </div>
           </div>
         </section>
