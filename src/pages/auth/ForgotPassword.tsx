@@ -272,20 +272,26 @@ export default function ForgotPassword() {
 
           {isSuccess ? (
             <div className="forgot-success">
-              <CheckCircle2 size={56} className="success-icon" />
-              <h2 className="success-title">Check your email</h2>
-              <p className="success-desc">
-                If the email <strong>{email}</strong> is associated with an account in our system, we've sent instructions to reset your password.
+              <CheckCircle2 size={56} className="success-icon" style={{ color: '#10b981', marginBottom: '1rem' }} />
+              <h2 className="success-title">Verification Code Sent</h2>
+              <p className="success-desc" style={{ fontSize: '14.5px', color: '#64748b', lineHeight: '1.5', marginBottom: '1.75rem' }}>
+                We have sent a 6-digit verification code to <br /><strong>{email}</strong>.
               </p>
-              <button className="forgot-back-login-btn" onClick={goBack}>
-                Return to Login
+              <button
+                className="forgot-submit-btn"
+                onClick={() => {
+                  window.history.pushState({}, '', `/reset-password?email=${encodeURIComponent(email)}`);
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                }}
+              >
+                Verify & Reset Password <ArrowRight size={15} />
               </button>
             </div>
           ) : (
             <>
-              <h2 className="forgot-heading">Forgot Password?</h2>
+              <h2 className="forgot-heading">Reset Password</h2>
               <p className="forgot-sub">
-                Enter your email address and we'll send you a secure link to reset your password.
+                Enter your email address and we'll send you a 6-digit verification code to reset your password.
               </p>
 
               {error && (
@@ -305,7 +311,7 @@ export default function ForgotPassword() {
                     <input
                       type="email"
                       className="forgot-input"
-                      placeholder="admin@school.com"
+                      placeholder="akshat.g10b14kis@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isLoading}
@@ -316,9 +322,9 @@ export default function ForgotPassword() {
 
                 <button type="submit" className="forgot-submit-btn" disabled={isLoading}>
                   {isLoading ? (
-                    <><div className="forgot-spinner" /> Sending link…</>
+                    <><div className="forgot-spinner" /> Sending code…</>
                   ) : (
-                    <>Send reset link <Send size={14} /></>
+                    <>Send verification code <Send size={14} /></>
                   )}
                 </button>
               </form>

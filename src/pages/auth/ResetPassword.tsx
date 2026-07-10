@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff, AlertTriangle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Lock, Eye, EyeOff, AlertTriangle, CheckCircle2, ArrowRight, Mail, KeyRound } from 'lucide-react';
 import { useResetPasswordMutation } from '../../store/api/authApi';
 
 export default function ResetPassword() {
   const [resetPassword, { isLoading, error, isSuccess }] = useResetPasswordMutation();
+  
+  // Extract pre-filled email from URL search params
+  const queryParams = new URLSearchParams(window.location.search);
+  
+  const [email, setEmail] = useState(queryParams.get('email') || '');
+  const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState('');
 
-  // Extract token from query params
-  const queryParams = new URLSearchParams(window.location.search);
-  const token = queryParams.get('token') || '';
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError('');
 
-    if (!token) {
-      setLocalError('No reset token found in URL. Please request a new password reset link.');
+    if (!email) {
+      setLocalError('Email address is required.');
+      return;
+    }
+
+    if (!otp || otp.length !== 6) {
+      setLocalError('Please enter a valid 6-digit verification code.');
       return;
     }
 
@@ -33,7 +40,7 @@ export default function ResetPassword() {
     }
 
     try {
-      await resetPassword({ token, newPassword }).unwrap();
+      await resetPassword({ email, otp, newPassword }).unwrap();
     } catch (err) {
       // Errors handled by RTK Query state
     }
@@ -105,7 +112,7 @@ export default function ResetPassword() {
           font-size: 13.5px;
           color: #64748b;
           text-align: center;
-          margin-bottom: 2rem;
+          margin-bottom: 1.75rem;
           line-height: 1.5;
         }
 
@@ -119,7 +126,7 @@ export default function ResetPassword() {
           border-radius: 8px;
           font-size: 13px;
           color: #b91c1c;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.25rem;
         }
 
         .reset-success {
@@ -149,12 +156,12 @@ export default function ResetPassword() {
         .reset-form {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.15rem;
         }
         .reset-field {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 5px;
         }
         .reset-label {
           font-size: 13px;
@@ -297,7 +304,7 @@ export default function ResetPassword() {
             <>
               <h2 className="reset-heading">Reset Password</h2>
               <p className="reset-sub">
-                Choose a strong, secure new password for your account.
+                Enter your verification code and choose a new password.
               </p>
 
               {(localError || error) && (
@@ -310,6 +317,39 @@ export default function ResetPassword() {
               )}
 
               <form className="reset-form" onSubmit={handleSubmit}>
+                <div className="reset-field">
+                  <label className="reset-label">Email Address</label>
+                  <div className="reset-input-wrap">
+                    <Mail size={15} className="reset-input-icon" />
+                    <input
+                      type="email"
+                      className="reset-input"
+                      placeholder="akshat.g10b14kis@gmail.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="reset-field">
+                  <label className="reset-label">Verification Code (6-digit OTP)</label>
+                  <div className="reset-input-wrap">
+                    <KeyRound size={15} className="reset-input-icon" />
+                    <input
+                      type="text"
+                      className="reset-input"
+                      placeholder="123456"
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} // only digits
+                      disabled={isLoading}
+                      required
+                    />
+                  </div>
+                </div>
+
                 <div className="reset-field">
                   <label className="reset-label">New Password</label>
                   <div className="reset-input-wrap">
@@ -350,9 +390,9 @@ export default function ResetPassword() {
                   </div>
                 </div>
 
-                <button type="submit" className="reset-submit-btn" disabled={isLoading || !token}>
+                <button type="submit" className="reset-submit-btn" disabled={isLoading}>
                   {isLoading ? (
-                    <><div className="reset-spinner" /> Resetting…</>
+                    <><div className="reset-spinner" /> Resetting password…</>
                   ) : (
                     <>Reset Password</>
                   )}
