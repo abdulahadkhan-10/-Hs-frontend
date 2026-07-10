@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Lock, ArrowRight, AlertTriangle, Eye, EyeOff, ChevronLeft, Building, Key, MapPin, Globe } from 'lucide-react';
 import { useRegisterSchoolMutation } from '../../store/api/authApi';
+import { toast } from 'sonner';
 
 interface RegistrationProps {
   onRegisterSuccess: (username: string, role: string) => void;
@@ -25,9 +26,14 @@ export default function SchoolRegistration({ onRegisterSuccess }: RegistrationPr
 
   useEffect(() => {
     if (isSuccess) {
-      onRegisterSuccess(formData.schoolName, 'school');
+      toast.success('Registration Submitted', {
+        description: 'Your school registration form has been submitted and is waiting for approval from the admin.',
+        duration: 6000,
+      });
+      window.history.pushState({}, '', '/login-school');
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
-  }, [isSuccess, onRegisterSuccess, formData.schoolName]);
+  }, [isSuccess]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

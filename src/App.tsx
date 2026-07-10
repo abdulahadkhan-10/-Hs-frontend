@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import SafeguardingOverview from './pages/SafeguardingOverview';
 import SafeguardingSubpages from './pages/SafeguardingSubpages';
 import OtherPages from './pages/OtherPages';
+import { Toaster } from 'sonner';
 
 // Auth Pages
 import LandingPage from './pages/LandingPage';
@@ -78,71 +79,80 @@ export default function App() {
     }
   };
 
-  if (!isAuthenticated) {
-    if (authRoute === '/login-school') {
-      return <SchoolLogin onLoginSuccess={handleLoginSuccess} />;
+  const renderContent = () => {
+    if (!isAuthenticated) {
+      if (authRoute === '/login-school') {
+        return <SchoolLogin onLoginSuccess={handleLoginSuccess} />;
+      }
+      if (authRoute === '/register-school') {
+        return <SchoolRegistration onRegisterSuccess={(userVal) => handleLoginSuccess(userVal, 'school')} />;
+      }
+      if (authRoute === '/login-teacher') {
+        return <TeacherLogin onLoginSuccess={handleLoginSuccess} />;
+      }
+      if (authRoute === '/login-student') {
+        return <StudentLogin onLoginSuccess={handleLoginSuccess} />;
+      }
+      if (authRoute === '/login-safeguard') {
+        return <SafeguardLogin onLoginSuccess={handleLoginSuccess} />;
+      }
+      if (authRoute === '/login-sa') {
+        return <SuperAdminLogin onLoginSuccess={handleLoginSuccess} />;
+      }
+      if (authRoute === '/forgot-password') {
+        return <ForgotPassword />;
+      }
+      if (authRoute.startsWith('/reset-password')) {
+        return <ResetPassword />;
+      }
+      // Default fallback is the new Landing Page
+      return <LandingPage onNavigate={setAuthRoute} />;
     }
-    if (authRoute === '/register-school') {
-      return <SchoolRegistration onRegisterSuccess={(userVal) => handleLoginSuccess(userVal, 'school')} />;
-    }
-    if (authRoute === '/login-teacher') {
-      return <TeacherLogin onLoginSuccess={handleLoginSuccess} />;
-    }
-    if (authRoute === '/login-student') {
-      return <StudentLogin onLoginSuccess={handleLoginSuccess} />;
-    }
-    if (authRoute === '/login-safeguard') {
-      return <SafeguardLogin onLoginSuccess={handleLoginSuccess} />;
-    }
-    if (authRoute === '/login-sa') {
-      return <SuperAdminLogin onLoginSuccess={handleLoginSuccess} />;
-    }
-    if (authRoute === '/forgot-password') {
-      return <ForgotPassword />;
-    }
-    if (authRoute.startsWith('/reset-password')) {
-      return <ResetPassword />;
-    }
-    // Default fallback is the new Landing Page
-    return <LandingPage onNavigate={setAuthRoute} />;
-  }
 
-  return (
-    <div className="app-container">
-      {/* Sidebar Navigation */}
-      <Sidebar 
-        currentPage={currentPage} 
-        currentSubpage={currentSubpage} 
-        onPageChange={handlePageChange} 
-      />
-
-      {/* Main Content Area */}
-      <main className="app-main">
-        <Header 
+    return (
+      <div className="app-container">
+        {/* Sidebar Navigation */}
+        <Sidebar 
           currentPage={currentPage} 
           currentSubpage={currentSubpage} 
-          onLogout={handleLogout} 
-          selectedChild={selectedChild}
-          setSelectedChild={setSelectedChild}
-          loggedInUser={loggedInUser}
+          onPageChange={handlePageChange} 
         />
 
-        <div className="app-body">
-          {currentPage === 'home' && <Home />}
+        {/* Main Content Area */}
+        <main className="app-main">
+          <Header 
+            currentPage={currentPage} 
+            currentSubpage={currentSubpage} 
+            onLogout={handleLogout} 
+            selectedChild={selectedChild}
+            setSelectedChild={setSelectedChild}
+            loggedInUser={loggedInUser}
+          />
 
-          {currentPage === 'safeguarding' && currentSubpage === 'overview' && (
-            <SafeguardingOverview onPageChange={handlePageChange} />
-          )}
+          <div className="app-body">
+            {currentPage === 'home' && <Home />}
 
-          {currentPage === 'safeguarding' && currentSubpage !== 'overview' && (
-            <SafeguardingSubpages subpage={currentSubpage} />
-          )}
+            {currentPage === 'safeguarding' && currentSubpage === 'overview' && (
+              <SafeguardingOverview onPageChange={handlePageChange} />
+            )}
 
-          {currentPage !== 'home' && currentPage !== 'safeguarding' && (
-            <OtherPages pageId={currentPage} />
-          )}
-        </div>
-      </main>
-    </div>
+            {currentPage === 'safeguarding' && currentSubpage !== 'overview' && (
+              <SafeguardingSubpages subpage={currentSubpage} />
+            )}
+
+            {currentPage !== 'home' && currentPage !== 'safeguarding' && (
+              <OtherPages pageId={currentPage} />
+            )}
+          </div>
+        </main>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {renderContent()}
+      <Toaster position="bottom-right" richColors />
+    </>
   );
 }
