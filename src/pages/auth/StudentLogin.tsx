@@ -220,7 +220,17 @@ export default function StudentLogin({ onLoginSuccess }: LoginProps) {
               <div className="stu-field">
                 <div className="stu-label-row">
                   <label className="stu-label">Password</label>
-                  <a href="#forgot" className="stu-forgot">Forgot password?</a>
+                  <a
+                    href="/forgot-password"
+                    className="stu-forgot"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/forgot-password');
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
+                  >
+                    Forgot password?
+                  </a>
                 </div>
                 <div className="stu-input-wrap">
                   <Lock size={15} className="stu-input-icon" />

@@ -228,7 +228,17 @@ export default function SchoolLogin({ onLoginSuccess }: LoginProps) {
               <div className="sch-field">
                 <div className="sch-label-row">
                   <label className="sch-label">Password</label>
-                  <a href="#forgot" className="sch-forgot">Forgot password?</a>
+                  <a
+                    href="/forgot-password"
+                    className="sch-forgot"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/forgot-password');
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
+                  >
+                    Forgot password?
+                  </a>
                 </div>
                 <div className="sch-input-wrap">
                   <Lock size={15} className="sch-input-icon" />

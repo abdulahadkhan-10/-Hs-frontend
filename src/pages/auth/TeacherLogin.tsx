@@ -220,7 +220,17 @@ export default function TeacherLogin({ onLoginSuccess }: LoginProps) {
               <div className="tch-field">
                 <div className="tch-label-row">
                   <label className="tch-label">Password</label>
-                  <a href="#forgot" className="tch-forgot">Forgot password?</a>
+                  <a
+                    href="/forgot-password"
+                    className="tch-forgot"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/forgot-password');
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
+                  >
+                    Forgot password?
+                  </a>
                 </div>
                 <div className="tch-input-wrap">
                   <Lock size={15} className="tch-input-icon" />

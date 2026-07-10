@@ -18,6 +18,8 @@ import TeacherLogin from './pages/auth/TeacherLogin';
 import StudentLogin from './pages/auth/StudentLogin';
 import SuperAdminLogin from './pages/auth/SuperAdminLogin';
 import SafeguardLogin from './pages/auth/SafeguardLogin';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -94,6 +96,12 @@ export default function App() {
     }
     if (authRoute === '/login-sa') {
       return <SuperAdminLogin onLoginSuccess={handleLoginSuccess} />;
+    }
+    if (authRoute === '/forgot-password') {
+      return <ForgotPassword />;
+    }
+    if (authRoute.startsWith('/reset-password')) {
+      return <ResetPassword />;
     }
     // Default fallback is the new Landing Page
     return <LandingPage onNavigate={setAuthRoute} />;

@@ -67,6 +67,20 @@ export const authApi = createApi({
       query: () => 'auth/me',
       providesTags: ['User'],
     }),
+    forgotPassword: builder.mutation<any, { email: string }>({
+      query: (data) => ({
+        url: 'auth/forgot-password',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation<any, any>({
+      query: (data) => ({
+        url: 'auth/reset-password',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -76,4 +90,6 @@ export const {
   useRegisterTeacherMutation,
   useRegisterStudentMutation,
   useGetMeQuery,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = authApi;
