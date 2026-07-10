@@ -125,14 +125,14 @@ export default function SafeguardingSubpages({ subpage }: SubpageProps) {
       <div className="card-widget">
         <h3 className="panel-title-text" style={{ marginBottom: '12px' }}>Safeguarding Policies & Standard Procedures</h3>
         <p style={{ fontSize: '0.82rem', color: '#475569', marginBottom: '20px' }}>
-          Download official documents outlining ILMEE's commitment to British National Safeguarding standards.
+          Download official documents outlining LSA's commitment to British National Safeguarding standards.
         </p>
 
         <div className="docs-download-grid">
           {[
             { title: 'Child Protection Policy 2026', size: '1.2 MB', desc: 'Core policies governing teacher, parent, and child safety compliance.' },
             { title: 'Online Safety & Digital Wellbeing', size: '940 KB', desc: 'Guidance on setting up parental controls and monitoring online class sessions.' },
-            { title: 'Tutor Code of Conduct', size: '580 KB', desc: 'Standard rules and verification procedures for all ILMEE curriculum tutors.' },
+            { title: 'Tutor Code of Conduct', size: '580 KB', desc: 'Standard rules and verification procedures for all LSA curriculum tutors.' },
             { title: 'GDPR & Child Data Privacy Policy', size: '1.5 MB', desc: 'How we store, process, and secure student profile data and logs.' }
           ].map((doc, idx) => (
             <div key={idx} className="doc-download-card" style={{ padding: '16px' }}>

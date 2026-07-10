@@ -194,7 +194,6 @@ export default function SchoolLogin({ onLoginSuccess }: LoginProps) {
           <div className="sch-card">
             <div className="sch-brand">
               <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
-              <span className="sch-brand-name">ILMEE</span>
               <span className="sch-brand-sub">LSA Portal</span>
             </div>
 
@@ -301,7 +300,7 @@ export default function SchoolLogin({ onLoginSuccess }: LoginProps) {
               Manage teachers, track student progress, and monitor all safeguarding aspects seamlessly.
             </p>
             <p className="sch-right-attr">
-              <strong>ILMEE LSA Portal</strong> · For Institutions
+              <strong>LSA Portal</strong> · For Institutions
             </p>
           </div>
         </div>

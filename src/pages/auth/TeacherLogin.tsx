@@ -186,7 +186,6 @@ export default function TeacherLogin({ onLoginSuccess }: LoginProps) {
           <div className="tch-card">
             <div className="tch-brand">
               <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
-              <span className="tch-brand-name">ILMEE</span>
               <span className="tch-brand-sub">LSA Portal</span>
             </div>
 
@@ -283,7 +282,7 @@ export default function TeacherLogin({ onLoginSuccess }: LoginProps) {
             </div>
 
             <p className="tch-right-quote">
-              The ILMEE platform makes tracking student progress and setting assignments effortless.
+              The LSA platform makes tracking student progress and setting assignments effortless.
             </p>
             <p className="tch-right-attr">
               <strong>Sarah Jenkins</strong> · Mathematics Tutor

@@ -186,7 +186,6 @@ export default function StudentLogin({ onLoginSuccess }: LoginProps) {
           <div className="stu-card">
             <div className="stu-brand">
               <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
-              <span className="stu-brand-name">ILMEE</span>
               <span className="stu-brand-sub">LSA Portal</span>
             </div>
 
@@ -286,7 +285,7 @@ export default function StudentLogin({ onLoginSuccess }: LoginProps) {
               Join live classes, submit homework, and collaborate with your teachers.
             </p>
             <p className="stu-right-attr">
-              <strong>ILMEE Platform</strong> · For Students
+              <strong>LSA Platform</strong> · For Students
             </p>
           </div>
         </div>

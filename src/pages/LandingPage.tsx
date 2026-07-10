@@ -347,7 +347,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="ilm-nav-logo">
             <img src="/ilmee_logo.png" alt="ILMEE Logo" className="ilm-logo-img" style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'contain' }} />
             <div>
-              <span className="ilm-brand-name">ILMEE</span>
+              <span className="ilm-brand-name">LSA</span>
               <span className="ilm-brand-tag">Educational Portals</span>
             </div>
           </div>
@@ -376,7 +376,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             for <span className="h1-underline">every learner</span>
           </h1>
           <p className="ilm-hero-sub">
-            ILMEE brings homeschooling and professional tuition together in one secure,
+            LSA brings homeschooling and professional tuition together in one secure,
             Ofsted-aligned portal — with AI-powered support and built-in safeguarding.
             Available in the UK and Egypt.
           </p>
@@ -497,7 +497,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="ilm-testimony-card">
             <div className="ilm-stars">★★★★★</div>
             <p className="ilm-quote">
-              The ILMEE homeschooling dashboard has saved our family countless hours.
+              The LSA homeschooling dashboard has saved our family countless hours.
               We have instant access to lessons, can track progress in real-time, and
               download complete reports required by our local authority.
             </p>
@@ -543,7 +543,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <h2>Ready to transform your educational experience?</h2>
           <p>
             Join thousands of schools, teachers, and students across the UK and Egypt
-            delivering high-quality, compliant tuition through ILMEE.
+            delivering high-quality, compliant tuition through LSA.
           </p>
           <div className="ilm-cta-bottom-btns">
             <button className="ilm-btn-gold" onClick={() => handleSelectPortal('/login-school')}>
@@ -559,7 +559,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <footer className="ilm-footer">
           <div className="ilm-footer-top">
             <div>
-              <p className="ilm-footer-brand">ILMEE</p>
+              <p className="ilm-footer-brand">LSA</p>
               <p className="ilm-footer-about">
                 Structured learning, automated parent oversight, and pupil safeguarding
                 under the British National Curriculum framework — available in the UK and Egypt.
@@ -576,7 +576,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
           <div className="ilm-footer-bottom">
             <p className="ilm-footer-reg">Registered UK Organisation · DfE Aligned · Safeguarding Framework Compliant</p>
-            <p className="ilm-footer-copy">&copy; {new Date().getFullYear()} ILMEE Education. All rights reserved.</p>
+            <p className="ilm-footer-copy">&copy; {new Date().getFullYear()} LSA Education. All rights reserved.</p>
           </div>
         </footer>
 

@@ -286,7 +286,7 @@ export default function ResetPassword() {
         <div className="reset-card">
           <div className="reset-brand">
             <div className="reset-brand-mark">IL</div>
-            <span className="reset-brand-name">ILMEE</span>
+            <span className="reset-brand-name">LSA</span>
           </div>
 
           {isSuccess ? (

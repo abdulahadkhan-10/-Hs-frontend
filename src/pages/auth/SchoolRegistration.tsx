@@ -204,7 +204,7 @@ export default function SchoolRegistration({ onRegisterSuccess }: RegistrationPr
           <div className="sch-reg-card">
             <div className="sch-reg-brand">
               <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
-              <span className="sch-reg-brand-name">ILMEE</span>
+              <span className="sch-reg-brand-name">LSA</span>
             </div>
 
             <h2 className="sch-reg-heading">School Registration</h2>

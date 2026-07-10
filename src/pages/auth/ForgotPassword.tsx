@@ -267,7 +267,7 @@ export default function ForgotPassword() {
 
           <div className="forgot-brand">
             <div className="forgot-brand-mark">IL</div>
-            <span className="forgot-brand-name">ILMEE</span>
+            <span className="forgot-brand-name">LSA</span>
           </div>
 
           {isSuccess ? (

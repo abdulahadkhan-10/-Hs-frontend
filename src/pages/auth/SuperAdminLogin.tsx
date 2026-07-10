@@ -213,7 +213,7 @@ export default function SuperAdminLogin({ onLoginSuccess }: LoginProps) {
           <div className="sa-card">
             <div className="sa-brand">
               <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
-              <span className="sa-brand-name">ILMEE</span>
+              <span className="sa-brand-name">LSA</span>
               <span className="sa-brand-sub">Super Admin Portal</span>
             </div>
 
@@ -297,7 +297,7 @@ export default function SuperAdminLogin({ onLoginSuccess }: LoginProps) {
 
             <h3 className="sa-right-title">Platform Administration</h3>
             <p className="sa-right-desc">
-              Full platform control for authorised ILMEE administrators.
+              Full platform control for authorised LSA administrators.
               Manage users, portals, and system-wide configurations.
             </p>
 

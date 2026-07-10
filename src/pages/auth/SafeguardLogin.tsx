@@ -186,7 +186,7 @@ export default function SafeguardLogin({ onLoginSuccess }: LoginProps) {
 
           <div className="gd-brand">
             <img src="/ilmee_logo.png" alt="ILMEE Logo" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'contain', marginBottom: '8px' }} />
-            <span className="gd-brand-name">ILMEE</span>
+            <span className="gd-brand-name">LSA</span>
             <span className="gd-brand-sub">Guard / Security Portal</span>
           </div>
 
