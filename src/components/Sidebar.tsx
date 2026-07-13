@@ -80,7 +80,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                   <button
                     onClick={() => onPageChange(item.id)}
                     className={`sidebar-link ${isActive ? 'active' : ''}`}
-                    style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                   >
                     <Icon size={18} />
                     <span>{item.label}</span>
@@ -94,7 +93,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={handleSafeguardingClick}
                 className={`sidebar-link ${currentPage === 'safeguarding' ? 'active' : ''} ${safeguardingOpen ? 'open' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <ShieldCheck size={18} />
                 <span>Safeguarding</span>
@@ -107,7 +105,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('safeguarding', 'overview')}
                       className={`submenu-link ${currentSubpage === 'overview' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Overview
                     </button>
@@ -116,7 +113,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('safeguarding', 'wellbeing')}
                       className={`submenu-link ${currentSubpage === 'wellbeing' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Wellbeing Check-ins
                     </button>
@@ -125,7 +121,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('safeguarding', 'concern-log')}
                       className={`submenu-link ${currentSubpage === 'concern-log' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Concern Log
                     </button>
@@ -134,7 +129,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('safeguarding', 'support')}
                       className={`submenu-link ${currentSubpage === 'support' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Support & Guidance
                     </button>
@@ -143,7 +137,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('safeguarding', 'policies')}
                       className={`submenu-link ${currentSubpage === 'policies' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Policies
                     </button>
@@ -157,7 +150,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={() => onPageChange('settings')}
                 className={`sidebar-link ${currentPage === 'settings' ? 'active' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <Settings size={18} />
                 <span>Settings</span>
@@ -171,7 +163,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={() => onPageChange('home')}
                 className={`sidebar-link ${currentPage === 'home' ? 'active' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <Home size={18} />
                 <span>Dashboard</span>
@@ -183,7 +174,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={handleSchoolUsersClick}
                 className={`sidebar-link ${currentPage === 'school-users' ? 'active' : ''} ${schoolUsersOpen ? 'open' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <Users size={18} />
                 <span>User Management</span>
@@ -196,7 +186,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('school-users', 'teachers')}
                       className={`submenu-link ${currentSubpage === 'teachers' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Teachers
                     </button>
@@ -205,7 +194,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('school-users', 'students')}
                       className={`submenu-link ${currentSubpage === 'students' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Students
                     </button>
@@ -214,7 +202,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
                     <button
                       onClick={() => onPageChange('school-users', 'safeguards')}
                       className={`submenu-link ${currentSubpage === 'safeguards' ? 'active' : ''}`}
-                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
                     >
                       Safeguards
                     </button>
@@ -228,7 +215,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={() => onPageChange('school-classes')}
                 className={`sidebar-link ${currentPage === 'school-classes' ? 'active' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <Layers size={18} />
                 <span>Classes</span>
@@ -240,7 +226,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={() => onPageChange('school-requests')}
                 className={`sidebar-link ${currentPage === 'school-requests' ? 'active' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <FileCheck size={18} />
                 <span>Admin Requests</span>
@@ -252,7 +237,6 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               <button
                 onClick={() => onPageChange('school-settings')}
                 className={`sidebar-link ${currentPage === 'school-settings' ? 'active' : ''}`}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <Settings size={18} />
                 <span>Settings</span>
@@ -262,15 +246,30 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
         )}
       </ul>
 
-      {/* Emergency Helpline Card */}
-      <div className="sidebar-help-card">
-        <div className="help-card-icon">
+      {/* Bottom Actions */}
+      <div className="sidebar-bottom-actions" style={{ marginTop: 'auto', paddingTop: '20px', paddingBottom: '10px' }}>
+        <button 
+          className="sd-pill-btn" 
+          style={{ width: '100%', marginBottom: '16px', background: 'var(--sg-yellow)', color: '#5a4000', border: 'none', padding: '12px 16px', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={() => window.location.href='tel:02079460958'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Safeguarding Helpline
+        </button>
+        
+        <button className="sidebar-link" style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', opacity: 0.8 }}>
           <HelpCircle size={18} />
-        </div>
-        <div className="help-card-title">Need Help?</div>
-        <div className="help-card-text">Safeguarding Helpline</div>
-        <a href="tel:02079460958" className="help-card-number">020 7946 0958</a>
-        <div className="help-card-extra">Out of hours: 999</div>
+          <span>Support</span>
+        </button>
+        
+        <button 
+          className="sidebar-link" 
+          style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', opacity: 0.8 }}
+          onClick={() => window.location.href='/login'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Sign Out</span>
+        </button>
       </div>
     </aside>
   );
