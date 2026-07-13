@@ -6,6 +6,8 @@ import { useGetMeQuery } from './store/api/authApi';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Home from './pages/Home';
+import SchoolDashboard from './pages/school/SchoolDashboard';
+import ClassesManagement from './pages/school/ClassesManagement';
 import SafeguardingOverview from './pages/SafeguardingOverview';
 import SafeguardingSubpages from './pages/SafeguardingSubpages';
 import OtherPages from './pages/OtherPages';
@@ -116,6 +118,7 @@ export default function App() {
           currentPage={currentPage} 
           currentSubpage={currentSubpage} 
           onPageChange={handlePageChange} 
+          userRole={user?.role}
         />
 
         {/* Main Content Area */}
@@ -130,7 +133,13 @@ export default function App() {
           />
 
           <div className="app-body">
-            {currentPage === 'home' && <Home />}
+            {currentPage === 'home' && (
+              user?.role === 'SCHOOL' ? <SchoolDashboard /> : <Home />
+            )}
+
+            {currentPage === 'school-classes' && (
+              <ClassesManagement />
+            )}
 
             {currentPage === 'safeguarding' && currentSubpage === 'overview' && (
               <SafeguardingOverview onPageChange={handlePageChange} />
@@ -140,7 +149,7 @@ export default function App() {
               <SafeguardingSubpages subpage={currentSubpage} />
             )}
 
-            {currentPage !== 'home' && currentPage !== 'safeguarding' && (
+            {currentPage !== 'home' && currentPage !== 'safeguarding' && currentPage !== 'school-classes' && (
               <OtherPages pageId={currentPage} />
             )}
           </div>

@@ -311,7 +311,7 @@ export default function ForgotPassword() {
                     <input
                       type="email"
                       className="forgot-input"
-                      placeholder="akshat.g10b14kis@gmail.com"
+                      placeholder="Enter your email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isLoading}

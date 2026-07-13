@@ -17,21 +17,33 @@ import {
   HelpCircle
 } from 'lucide-react';
 
+import { Layers, FileCheck } from 'lucide-react';
+
 interface SidebarProps {
   currentPage: string;
   currentSubpage: string;
   onPageChange: (page: string, subpage?: string) => void;
+  userRole?: string;
 }
 
-export default function Sidebar({ currentPage, currentSubpage, onPageChange }: SidebarProps) {
+export default function Sidebar({ currentPage, currentSubpage, onPageChange, userRole }: SidebarProps) {
   const [safeguardingOpen, setSafeguardingOpen] = useState(currentPage === 'safeguarding');
+  const [schoolUsersOpen, setSchoolUsersOpen] = useState(currentPage === 'school-users');
 
   const handleSafeguardingClick = () => {
     setSafeguardingOpen(!safeguardingOpen);
     onPageChange('safeguarding', 'overview');
   };
 
-  const navItems = [
+  const handleSchoolUsersClick = () => {
+    setSchoolUsersOpen(!schoolUsersOpen);
+    onPageChange('school-users', 'teachers');
+  };
+
+  const isSchool = userRole === 'SCHOOL';
+
+  // Default menu items for standard users (Parents/Students)
+  const defaultNavItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'my-children', label: 'My Children', icon: Users },
     { id: 'my-learning', label: 'My Learning', icon: BookOpen },
@@ -58,97 +70,196 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange }: S
 
       {/* Navigation List */}
       <ul className="sidebar-menu">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = currentPage === item.id;
-          return (
-            <li key={item.id} className="menu-item-wrapper">
+        {!isSchool ? (
+          <>
+            {defaultNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentPage === item.id;
+              return (
+                <li key={item.id} className="menu-item-wrapper">
+                  <button
+                    onClick={() => onPageChange(item.id)}
+                    className={`sidebar-link ${isActive ? 'active' : ''}`}
+                    style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                  >
+                    <Icon size={18} />
+                    <span>{item.label}</span>
+                  </button>
+                </li>
+              );
+            })}
+
+            {/* Safeguarding Dropdown Menu */}
+            <li className="menu-item-wrapper">
               <button
-                onClick={() => onPageChange(item.id)}
-                className={`sidebar-link ${isActive ? 'active' : ''}`}
+                onClick={handleSafeguardingClick}
+                className={`sidebar-link ${currentPage === 'safeguarding' ? 'active' : ''} ${safeguardingOpen ? 'open' : ''}`}
                 style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
               >
-                <Icon size={18} />
-                <span>{item.label}</span>
+                <ShieldCheck size={18} />
+                <span>Safeguarding</span>
+                <ChevronRight size={14} className="chevron" />
+              </button>
+              
+              {safeguardingOpen && (
+                <ul className="submenu-list">
+                  <li>
+                    <button
+                      onClick={() => onPageChange('safeguarding', 'overview')}
+                      className={`submenu-link ${currentSubpage === 'overview' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Overview
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onPageChange('safeguarding', 'wellbeing')}
+                      className={`submenu-link ${currentSubpage === 'wellbeing' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Wellbeing Check-ins
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onPageChange('safeguarding', 'concern-log')}
+                      className={`submenu-link ${currentSubpage === 'concern-log' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Concern Log
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onPageChange('safeguarding', 'support')}
+                      className={`submenu-link ${currentSubpage === 'support' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Support & Guidance
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onPageChange('safeguarding', 'policies')}
+                      className={`submenu-link ${currentSubpage === 'policies' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Policies
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </li>
+
+            {/* Settings */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('settings')}
+                className={`sidebar-link ${currentPage === 'settings' ? 'active' : ''}`}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+              >
+                <Settings size={18} />
+                <span>Settings</span>
               </button>
             </li>
-          );
-        })}
+          </>
+        ) : (
+          <>
+            {/* School Dashboard Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('home')}
+                className={`sidebar-link ${currentPage === 'home' ? 'active' : ''}`}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+              >
+                <Home size={18} />
+                <span>Dashboard</span>
+              </button>
+            </li>
 
-        {/* Safeguarding Dropdown Menu */}
-        <li className="menu-item-wrapper">
-          <button
-            onClick={handleSafeguardingClick}
-            className={`sidebar-link ${currentPage === 'safeguarding' ? 'active' : ''} ${safeguardingOpen ? 'open' : ''}`}
-            style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-          >
-            <ShieldCheck size={18} />
-            <span>Safeguarding</span>
-            <ChevronRight size={14} className="chevron" />
-          </button>
-          
-          {safeguardingOpen && (
-            <ul className="submenu-list">
-              <li>
-                <button
-                  onClick={() => onPageChange('safeguarding', 'overview')}
-                  className={`submenu-link ${currentSubpage === 'overview' ? 'active' : ''}`}
-                  style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-                >
-                  Overview
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onPageChange('safeguarding', 'wellbeing')}
-                  className={`submenu-link ${currentSubpage === 'wellbeing' ? 'active' : ''}`}
-                  style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-                >
-                  Wellbeing Check-ins
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onPageChange('safeguarding', 'concern-log')}
-                  className={`submenu-link ${currentSubpage === 'concern-log' ? 'active' : ''}`}
-                  style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-                >
-                  Concern Log
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onPageChange('safeguarding', 'support')}
-                  className={`submenu-link ${currentSubpage === 'support' ? 'active' : ''}`}
-                  style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-                >
-                  Support & Guidance
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onPageChange('safeguarding', 'policies')}
-                  className={`submenu-link ${currentSubpage === 'policies' ? 'active' : ''}`}
-                  style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-                >
-                  Policies
-                </button>
-              </li>
-            </ul>
-          )}
-        </li>
+            {/* School User Management Dropdown */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={handleSchoolUsersClick}
+                className={`sidebar-link ${currentPage === 'school-users' ? 'active' : ''} ${schoolUsersOpen ? 'open' : ''}`}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+              >
+                <Users size={18} />
+                <span>User Management</span>
+                <ChevronRight size={14} className="chevron" />
+              </button>
+              
+              {schoolUsersOpen && (
+                <ul className="submenu-list">
+                  <li>
+                    <button
+                      onClick={() => onPageChange('school-users', 'teachers')}
+                      className={`submenu-link ${currentSubpage === 'teachers' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Teachers
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onPageChange('school-users', 'students')}
+                      className={`submenu-link ${currentSubpage === 'students' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Students
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onPageChange('school-users', 'safeguards')}
+                      className={`submenu-link ${currentSubpage === 'safeguards' ? 'active' : ''}`}
+                      style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                    >
+                      Safeguards
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </li>
 
-        {/* Settings */}
-        <li className="menu-item-wrapper">
-          <button
-            onClick={() => onPageChange('settings')}
-            className={`sidebar-link ${currentPage === 'settings' ? 'active' : ''}`}
-            style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
-          >
-            <Settings size={18} />
-            <span>Settings</span>
-          </button>
-        </li>
+            {/* Classes Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('school-classes')}
+                className={`sidebar-link ${currentPage === 'school-classes' ? 'active' : ''}`}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+              >
+                <Layers size={18} />
+                <span>Classes</span>
+              </button>
+            </li>
+
+            {/* Admin Requests Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('school-requests')}
+                className={`sidebar-link ${currentPage === 'school-requests' ? 'active' : ''}`}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+              >
+                <FileCheck size={18} />
+                <span>Admin Requests</span>
+              </button>
+            </li>
+
+            {/* School Settings Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('school-settings')}
+                className={`sidebar-link ${currentPage === 'school-settings' ? 'active' : ''}`}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+              >
+                <Settings size={18} />
+                <span>Settings</span>
+              </button>
+            </li>
+          </>
+        )}
       </ul>
 
       {/* Emergency Helpline Card */}
