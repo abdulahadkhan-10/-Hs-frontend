@@ -224,6 +224,10 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: var(--transition-smooth);
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
 }
 
 .submenu-link:hover, .submenu-link.active {
@@ -293,6 +297,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: 0;
 }
 
 /* Header styling */
@@ -3147,7 +3152,7 @@ body {
 /* ── Bottom split layout ── */
 .sd-split {
   display: grid;
-  grid-template-columns: 1.65fr 1fr;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
   gap: 24px;
   align-items: start;
 }
@@ -3332,14 +3337,14 @@ body {
 }
 
 /* Modals & Inputs Overhaul */
-.sd-form-input, select, input[type="text"] {
+.sd-form-input, select {
   background: #ffffff !important;
   border: 1px solid var(--border-light) !important;
   transition: all 0.2s ease !important;
   font-family: var(--font-sans) !important;
 }
 
-.sd-form-input:focus, select:focus, input[type="text"]:focus {
+.sd-form-input:focus, select:focus {
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(61, 82, 72, 0.12) !important;
   outline: none !important;

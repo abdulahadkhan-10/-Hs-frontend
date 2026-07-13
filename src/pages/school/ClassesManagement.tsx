@@ -164,28 +164,6 @@ export default function ClassesManagement() {
       {!selectedClassId ? (
         // ─── OVERVIEW GRID VIEW ───────────────────────────────────────────────────
         <>
-          {/* Top Navbar Simulation */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '24px', marginBottom: '40px', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-            <span style={{ cursor: 'pointer', color: 'var(--primary)' }}>Overview</span>
-            <span style={{ cursor: 'pointer' }}>Reports</span>
-            <span style={{ cursor: 'pointer' }}>Resources</span>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.6)', padding: '8px 16px', borderRadius: '30px', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.8)' }}>
-              <Search size={16} style={{ color: 'var(--text-muted)' }} />
-              <input type="text" placeholder="Search..." style={{ border: 'none', background: 'transparent', outline: 'none', width: '150px' }} />
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'var(--primary)' }}>
-              <div style={{ position: 'relative', cursor: 'pointer' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <div style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, background: '#ef4444', borderRadius: '50%', border: '2px solid #fff' }}></div>
-              </div>
-              <div style={{ cursor: 'pointer' }}>
-                <User size={20} />
-              </div>
-              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Profile" style={{ width: 32, height: 32, borderRadius: '50%', border: '2px solid #fff', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', cursor: 'pointer' }} />
-            </div>
-          </div>
 
           <div className="sd-topbar" style={{ marginBottom: '40px' }}>
             <div>
@@ -520,6 +498,7 @@ export default function ClassesManagement() {
                 <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>DIVISION / SECTION (e.g. Division A)</label>
                 <input
                   type="text"
+                  className="sd-form-input"
                   placeholder="e.g. Division A"
                   required
                   value={newClass.division}
@@ -606,6 +585,7 @@ export default function ClassesManagement() {
                 <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>SUBJECT NAME (e.g. Science, Mathematics)</label>
                 <input
                   type="text"
+                  className="sd-form-input"
                   placeholder="e.g. History"
                   required
                   value={newSubject.name}

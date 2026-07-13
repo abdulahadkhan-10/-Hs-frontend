@@ -248,14 +248,7 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
 
       {/* Bottom Actions */}
       <div className="sidebar-bottom-actions" style={{ marginTop: 'auto', paddingTop: '20px', paddingBottom: '10px' }}>
-        <button 
-          className="sd-pill-btn" 
-          style={{ width: '100%', marginBottom: '16px', background: 'var(--sg-yellow)', color: '#5a4000', border: 'none', padding: '12px 16px', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}
-          onClick={() => window.location.href='tel:02079460958'}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          Safeguarding Helpline
-        </button>
+       
         
         <button className="sidebar-link" style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', opacity: 0.8 }}>
           <HelpCircle size={18} />
