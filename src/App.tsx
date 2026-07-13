@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store';
 import { setCredentials, logout } from './store/slices/authSlice';
-import { useGetMeQuery } from './store/api/authApi';
+import { useGetMeQuery, useLogoutMutation } from './store/api/authApi';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -33,7 +33,7 @@ export default function App() {
 
   useEffect(() => {
     if (meData?.user) {
-      dispatch(setCredentials({ user: meData.user, token: localStorage.getItem('auth_token') || '' }));
+      dispatch(setCredentials({ user: meData.user }));
     } else if (meError) {
       dispatch(logout());
     }
@@ -58,16 +58,24 @@ export default function App() {
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
+  const [logoutApi] = useLogoutMutation();
+
   // Authentication Handlers
   const handleLoginSuccess = (_userVal: string, _role: string) => {
     setCurrentPage('home');
     window.history.pushState({}, '', '/');
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    window.history.pushState({}, '', '/');
-    setAuthRoute('/');
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+    } catch (err) {
+      console.error("Failed to log out on server:", err);
+    } finally {
+      dispatch(logout());
+      window.history.pushState({}, '', '/');
+      setAuthRoute('/');
+    }
   };
 
   const handlePageChange = (page: string, subpage?: string) => {

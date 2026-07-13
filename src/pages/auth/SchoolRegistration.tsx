@@ -7,7 +7,7 @@ interface RegistrationProps {
   onRegisterSuccess: (username: string, role: string) => void;
 }
 
-export default function SchoolRegistration({ onRegisterSuccess }: RegistrationProps) {
+export default function SchoolRegistration({ onRegisterSuccess: _onRegisterSuccess }: RegistrationProps) {
   const [registerSchool, { isLoading, error, isSuccess }] = useRegisterSchoolMutation();
 
   const [formData, setFormData] = useState({

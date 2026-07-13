@@ -18,7 +18,7 @@ export default function SchoolLogin({ onLoginSuccess }: LoginProps) {
 
   useEffect(() => {
     if (data) {
-      dispatch(setCredentials({ user: data.user, token: data.token }));
+      dispatch(setCredentials({ user: data.user }));
       onLoginSuccess(data.user.profile?.schoolName || data.user.email.split('@')[0], 'school');
     }
   }, [data, onLoginSuccess, dispatch]);

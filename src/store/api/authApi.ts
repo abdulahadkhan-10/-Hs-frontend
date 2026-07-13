@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery, type BaseQueryFn, type FetchArgs, type FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { logout } from '../slices/authSlice';
 
 export interface UserProfile {
   id: string;
@@ -10,7 +11,7 @@ export interface UserProfile {
 
 export interface LoginResponse {
   message: string;
-  token: string;
+  token?: string; // Optional since it's stored in cookie now
   user: UserProfile;
 }
 
@@ -26,9 +27,68 @@ export interface RegisterSchoolRequest {
   password?: string;
 }
 
+let isRefreshing = false;
+let refreshSubscribers: (() => void)[] = [];
+
+const subscribeTokenRefresh = (cb: () => void) => {
+  refreshSubscribers.push(cb);
+};
+
+const onRefreshed = () => {
+  refreshSubscribers.forEach((cb) => cb());
+  refreshSubscribers = [];
+};
+
+const baseQuery = fetchBaseQuery({ baseUrl: '/api/' });
+
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    // If already refreshing, wait and retry when done
+    if (isRefreshing) {
+      return new Promise((resolve) => {
+        subscribeTokenRefresh(() => {
+          resolve(baseQuery(args, api, extraOptions));
+        });
+      });
+    }
+
+    isRefreshing = true;
+
+    try {
+      const refreshResult = await baseQuery(
+        { url: 'auth/refresh', method: 'POST' },
+        api,
+        extraOptions
+      );
+
+      if (refreshResult.data) {
+        isRefreshing = false;
+        onRefreshed();
+        result = await baseQuery(args, api, extraOptions);
+      } else {
+        isRefreshing = false;
+        refreshSubscribers = [];
+        api.dispatch(logout());
+      }
+    } catch (err) {
+      isRefreshing = false;
+      refreshSubscribers = [];
+      api.dispatch(logout());
+    }
+  }
+
+  return result;
+};
+
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['User'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, any>({
@@ -81,6 +141,13 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    logout: builder.mutation<any, void>({
+      query: () => ({
+        url: 'auth/logout',
+        method: 'POST',
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
 });
 
@@ -92,4 +159,5 @@ export const {
   useGetMeQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useLogoutMutation,
 } = authApi;

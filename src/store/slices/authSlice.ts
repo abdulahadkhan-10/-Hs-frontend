@@ -3,13 +3,11 @@ import { authApi, UserProfile } from '../api/authApi';
 
 interface AuthState {
   isAuthenticated: boolean;
-  token: string | null;
   user: UserProfile | null;
 }
 
 const initialState: AuthState = {
-  isAuthenticated: !!localStorage.getItem('auth_token'),
-  token: localStorage.getItem('auth_token'),
+  isAuthenticated: !!localStorage.getItem('auth_user'),
   user: localStorage.getItem('auth_user') 
     ? JSON.parse(localStorage.getItem('auth_user')!) 
     : null,
@@ -21,22 +19,20 @@ const authSlice = createSlice({
   reducers: {
     setCredentials(
       state,
-      action: { payload: { user: UserProfile; token: string } }
+      action: { payload: { user: UserProfile } }
     ) {
-      const { user, token } = action.payload;
+      const { user } = action.payload;
       state.isAuthenticated = true;
-      state.token = token;
       state.user = user;
-      localStorage.setItem('auth_token', token);
       localStorage.setItem('auth_user', JSON.stringify(user));
     },
     logout(state) {
       state.isAuthenticated = false;
-      state.token = null;
       state.user = null;
-      localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
+      // Clear client-accessible cookies if any (httpOnly cookies must be cleared by backend logout endpoint)
       document.cookie = 'token=; Max-Age=0; path=/;';
+      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
     },
   },
   extraReducers: (builder) => {
@@ -44,9 +40,7 @@ const authSlice = createSlice({
       authApi.endpoints.login.matchFulfilled,
       (state, action) => {
         state.isAuthenticated = true;
-        state.token = action.payload.token;
         state.user = action.payload.user;
-        localStorage.setItem('auth_token', action.payload.token);
         localStorage.setItem('auth_user', JSON.stringify(action.payload.user));
       }
     );
@@ -55,3 +49,4 @@ const authSlice = createSlice({
 
 export const { setCredentials, logout } = authSlice.actions;
 export default authSlice.reducer;
+
