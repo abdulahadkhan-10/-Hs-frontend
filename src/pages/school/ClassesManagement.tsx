@@ -165,10 +165,10 @@ export default function ClassesManagement() {
         // ─── OVERVIEW GRID VIEW ───────────────────────────────────────────────────
         <>
 
-          <div className="sd-topbar" style={{ marginBottom: '40px' }}>
+          <div className="sd-topbar" style={{ marginBottom: '24px' }}>
             <div>
-              <h1 className="sd-title" style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-1px', marginBottom: '8px' }}>Class<br/>Management</h1>
-              <p className="sd-subtitle" style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '500px' }}>Oversee rosters, assign educators, and manage curriculum modules.</p>
+              <h1 className="sd-title" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.5px', marginBottom: '6px' }}>Class Management</h1>
+              <p className="sd-subtitle" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', maxWidth: '500px' }}>Oversee rosters, assign educators, and manage curriculum modules.</p>
             </div>
           </div>
 
@@ -200,42 +200,42 @@ export default function ClassesManagement() {
               const mockPhotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(classTeacherName)}&background=random&color=fff`;
 
               return (
-                <div key={cls.id} className="sd-kpi-card" style={{ flexDirection: 'column', padding: '32px', position: 'relative', borderRadius: '24px', background: '#ffffff' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '24px' }}>
-                    <h3 className="sd-action-label" style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
-                      {cls.grade} -<br/>{cls.division}
+                <div key={cls.id} className="sd-kpi-card" style={{ flexDirection: 'column', padding: '24px', position: 'relative', borderRadius: '16px', background: '#ffffff' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '16px' }}>
+                    <h3 className="sd-action-label" style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
+                      {cls.grade} - {cls.division}
                     </h3>
-                    <span className="sd-pill sd-pill-blue" style={{ fontSize: '0.8rem', fontWeight: 700, padding: '6px 14px', background: 'rgba(61, 82, 72, 0.1)', color: 'var(--primary)' }}>
+                    <span className="sd-pill sd-pill-blue" style={{ fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', background: 'rgba(61, 82, 72, 0.1)', color: 'var(--primary)' }}>
                       {cls.students ? cls.students.length : 0} Enrolled
                     </span>
                   </div>
                   
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: 'auto', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '24px', width: '100%' }}>
-                    <img src={mockPhotoUrl} alt={classTeacherName} style={{ width: 44, height: 44, borderRadius: '50%', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: 'auto', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '16px', width: '100%' }}>
+                    <img src={mockPhotoUrl} alt={classTeacherName} style={{ width: 36, height: 36, borderRadius: '50%', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }} />
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>{classTeacherName}</span>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Lead Educator</span>
+                      <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>{classTeacherName}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Lead Educator</span>
                     </div>
                   </div>
 
                   <button 
                     onClick={() => { setSelectedClassId(cls.id); setActiveTab('students'); }}
-                    style={{ marginTop: '24px', width: '100%', justifyContent: 'center', background: 'var(--primary-light)', border: 'none', padding: '12px', borderRadius: '12px', fontWeight: 700, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}
+                    style={{ marginTop: '16px', width: '100%', justifyContent: 'center', background: 'var(--primary-light)', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: 700, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}
                   >
                     Manage Class Roster
-                    <ChevronRight size={16} />
+                    <ChevronRight size={14} />
                   </button>
                 </div>
               );
             })}
 
             {/* Draft New Cohort Placeholder */}
-            <div className="sd-kpi-card" style={{ flexDirection: 'column', padding: '32px', position: 'relative', borderRadius: '24px', background: 'rgba(255,255,255,0.4)', border: '2px dashed rgba(61, 82, 72, 0.2)', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onClick={() => setShowCreateModal(true)}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(61, 82, 72, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', marginBottom: '24px' }}>
-                <Plus size={32} />
+            <div className="sd-kpi-card" style={{ flexDirection: 'column', padding: '24px', position: 'relative', borderRadius: '16px', background: 'rgba(255,255,255,0.4)', border: '2px dashed rgba(61, 82, 72, 0.2)', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onClick={() => setShowCreateModal(true)}>
+              <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(61, 82, 72, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', marginBottom: '16px' }}>
+                <Plus size={24} />
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '8px' }}>Draft New Cohort</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Set up a new curriculum track</p>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '4px' }}>Draft New Cohort</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Set up a new curriculum track</p>
             </div>
           </div>
 
@@ -263,28 +263,28 @@ export default function ClassesManagement() {
           </div>
 
           {/* Class Summary Banner */}
-          <div className="sd-section-card" style={{ padding: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, #3d5248, #6b8c7a)', color: 'white', borderRadius: '16px', boxShadow: '0 16px 32px -8px rgba(61, 82, 72, 0.35)' }}>
+          <div className="sd-section-card" style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, #3d5248, #6b8c7a)', color: 'white', borderRadius: '12px', boxShadow: '0 10px 20px -5px rgba(61, 82, 72, 0.2)' }}>
             <div>
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.5px' }}>Active Cohort</span>
-                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.5px' }}>Advanced Track</span>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.5px' }}>Active Cohort</span>
+                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.5px' }}>Advanced Track</span>
               </div>
-              <h1 className="sd-title" style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 8px 0', color: 'white', letterSpacing: '-0.5px' }}>
+              <h1 className="sd-title" style={{ fontSize: '1.6rem', fontWeight: 800, margin: '0 0 4px 0', color: 'white', letterSpacing: '-0.3px' }}>
                 {activeClass?.grade} - {activeClass?.division}
               </h1>
-              <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)', margin: 0 }}>
+              <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', margin: 0 }}>
                 Homeroom: Rm 402 • Capacity: {activeClass?.students?.length || 0}/30
               </p>
             </div>
             
-            <div style={{ display: 'flex', gap: '16px' }}>
-              <div style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', minWidth: '110px' }}>
-                <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '4px' }}>98%</div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px' }}>Attendance</div>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.08)', padding: '10px 16px', borderRadius: '12px', textAlign: 'center', minWidth: '90px' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '2px' }}>98%</div>
+                <div style={{ fontSize: '0.68rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px' }}>Attendance</div>
               </div>
-              <div style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', minWidth: '110px' }}>
-                <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '4px' }}>4.2</div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px' }}>Avg GPA</div>
+              <div style={{ border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.08)', padding: '10px 16px', borderRadius: '12px', textAlign: 'center', minWidth: '90px' }}>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '2px' }}>4.2</div>
+                <div style={{ fontSize: '0.68rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px' }}>Avg GPA</div>
               </div>
             </div>
           </div>
