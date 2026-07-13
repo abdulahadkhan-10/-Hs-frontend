@@ -1,30 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import {
+  useGetSchoolClassesQuery,
+  useGetTeachersQuery,
+  useCreateClassMutation,
+} from '../../store/api/teacherApi';
+import { toast } from 'sonner';
 import {
   Layers,
   Users,
-  User,
   Plus,
   BookOpen,
   ArrowLeft,
   Search,
   Trash2,
-  Calendar,
   ChevronRight,
   Sparkles,
   UserCheck,
-  Tag
+  Tag,
+  User
 } from 'lucide-react';
 
 // ─── Initial Mock Data ────────────────────────────────────────────────────────
-const initialTeachers = [
-  { id: 't1', name: 'Sarah Jenkins', expertise: 'Mathematics', initial: 'S' },
-  { id: 't2', name: 'David Miller', expertise: 'Science', initial: 'D' },
-  { id: 't3', name: 'Emma Watson', expertise: 'English Lit', initial: 'E' },
-  { id: 't4', name: 'James Wilson', expertise: 'History', initial: 'J' },
-  { id: 't5', name: 'Grace Taylor', expertise: 'Physical Education', initial: 'G' },
-  { id: 't6', name: 'Robert Chen', expertise: 'Computing', initial: 'R' },
-];
-
 const initialStudents = [
   { id: 's1', name: 'Oliver Smith', email: 'oliver.smith@gmail.com', dob: '12/04/2014', grade: 'Year 6' },
   { id: 's2', name: 'Sophia Brown', email: 'sophia.brown@gmail.com', dob: '23/08/2014', grade: 'Year 6' },
@@ -36,59 +34,23 @@ const initialStudents = [
   { id: 's8', name: 'Charlotte Avery', email: 'charlotte.a@gmail.com', dob: '22/05/2017', grade: 'Year 3' },
 ];
 
-const initialClasses = [
-  {
-    id: 'c1',
-    grade: 'Year 6',
-    division: 'Division A',
-    classTeacherId: 't1', // Sarah Jenkins
-    students: ['s1', 's2', 's4'],
-    subjectTeachers: [
-      { subject: 'Mathematics', teacherId: 't1' },
-      { subject: 'Science', teacherId: 't2' },
-      { subject: 'English Lit', teacherId: 't3' },
-    ]
-  },
-  {
-    id: 'c2',
-    grade: 'Year 5',
-    division: 'Division B',
-    classTeacherId: 't2', // David Miller
-    students: ['s3', 's5'],
-    subjectTeachers: [
-      { subject: 'Mathematics', teacherId: 't1' },
-      { subject: 'Science', teacherId: 't2' },
-      { subject: 'History', teacherId: 't4' },
-    ]
-  },
-  {
-    id: 'c3',
-    grade: 'Year 4',
-    division: 'Division A',
-    classTeacherId: 't4', // James Wilson
-    students: ['s6', 's7'],
-    subjectTeachers: [
-      { subject: 'Computing', teacherId: 't6' },
-      { subject: 'English Lit', teacherId: 't3' },
-    ]
-  },
-  {
-    id: 'c4',
-    grade: 'Year 3',
-    division: 'Division C',
-    classTeacherId: 't5', // Grace Taylor
-    students: ['s8'],
-    subjectTeachers: [
-      { subject: 'Physical Education', teacherId: 't5' },
-      { subject: 'Mathematics', teacherId: 't1' },
-    ]
-  }
-];
-
 export default function ClassesManagement() {
-  const [classes, setClasses] = useState(initialClasses);
-  const [teachers] = useState(initialTeachers);
-  const [students, setStudents] = useState(initialStudents);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const schoolId = user?.profile?.id || '';
+
+  const { data: classesData } = useGetSchoolClassesQuery(schoolId, { skip: !schoolId });
+  const { data: teachersData } = useGetTeachersQuery(schoolId, { skip: !schoolId });
+  const [createClass] = useCreateClassMutation();
+
+  const [classes, setClasses] = useState<any[]>([]);
+  const teachers = teachersData?.teachers || [];
+  const [students] = useState(initialStudents);
+
+  useEffect(() => {
+    if (classesData?.classes) {
+      setClasses(classesData.classes);
+    }
+  }, [classesData]);
 
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'students' | 'subjects'>('students');
@@ -100,29 +62,31 @@ export default function ClassesManagement() {
   const [showAssignSubjectModal, setShowAssignSubjectModal] = useState(false);
 
   // Forms
-  const [newClass, setNewClass] = useState({ grade: 'Year 6', division: '', classTeacherId: 't1' });
+  const [newClass, setNewClass] = useState({ grade: 'Year 6', division: '', classTeacherId: '' });
   const [selectedStudentId, setSelectedStudentId] = useState('');
-  const [newSubject, setNewSubject] = useState({ name: '', teacherId: 't1' });
+  const [newSubject, setNewSubject] = useState({ name: '', teacherId: '' });
 
   const activeClass = classes.find(c => c.id === selectedClassId);
 
   // Handlers
-  const handleCreateClass = (e: React.FormEvent) => {
+  const handleCreateClass = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newClass.division) return;
 
-    const createdClass = {
-      id: `c${classes.length + 1}`,
-      grade: newClass.grade,
-      division: newClass.division,
-      classTeacherId: newClass.classTeacherId,
-      students: [],
-      subjectTeachers: []
-    };
+    try {
+      await createClass({
+        grade: newClass.grade,
+        division: newClass.division,
+        schoolId,
+        classTeacherId: newClass.classTeacherId || undefined,
+      }).unwrap();
 
-    setClasses([...classes, createdClass]);
-    setShowCreateModal(false);
-    setNewClass({ grade: 'Year 6', division: '', classTeacherId: 't1' });
+      toast.success('Class created successfully!');
+      setShowCreateModal(false);
+      setNewClass({ grade: 'Year 6', division: '', classTeacherId: '' });
+    } catch (err: any) {
+      toast.error(err.data?.error || 'Failed to create class');
+    }
   };
 
   const handleAddStudentToClass = (e: React.FormEvent) => {
@@ -144,9 +108,9 @@ export default function ClassesManagement() {
 
   const handleRemoveStudentFromClass = (studentId: string) => {
     if (!selectedClassId) return;
-    setClasses(classes.map(c => {
+    setClasses(classes.map((c: any) => {
       if (c.id === selectedClassId) {
-        return { ...c, students: c.students.filter(id => id !== studentId) };
+        return { ...c, students: c.students.filter((id: string) => id !== studentId) };
       }
       return c;
     }));
@@ -156,10 +120,10 @@ export default function ClassesManagement() {
     e.preventDefault();
     if (!newSubject.name || !selectedClassId) return;
 
-    setClasses(classes.map(c => {
+    setClasses(classes.map((c: any) => {
       if (c.id === selectedClassId) {
         // filter out if same subject already exists to update it
-        const filtered = c.subjectTeachers.filter(s => s.subject.toLowerCase() !== newSubject.name.toLowerCase());
+        const filtered = c.subjectTeachers.filter((s: any) => s.subject.toLowerCase() !== newSubject.name.toLowerCase());
         return {
           ...c,
           subjectTeachers: [...filtered, { subject: newSubject.name, teacherId: newSubject.teacherId }]
@@ -169,27 +133,27 @@ export default function ClassesManagement() {
     }));
 
     setShowAssignSubjectModal(false);
-    setNewSubject({ name: '', teacherId: 't1' });
+    setNewSubject({ name: '', teacherId: '' });
   };
 
   const handleRemoveSubjectAssignment = (subjectName: string) => {
     if (!selectedClassId) return;
-    setClasses(classes.map(c => {
+    setClasses(classes.map((c: any) => {
       if (c.id === selectedClassId) {
         return {
           ...c,
-          subjectTeachers: c.subjectTeachers.filter(s => s.subject !== subjectName)
+          subjectTeachers: c.subjectTeachers.filter((s: any) => s.subject !== subjectName)
         };
       }
       return c;
     }));
   };
 
-  const getTeacherName = (id: string) => teachers.find(t => t.id === id)?.name || 'Unknown';
-  const getTeacherInitial = (id: string) => teachers.find(t => t.id === id)?.initial || '?';
+  const getTeacherName = (id: string) => teachers.find((t: any) => t.id === id)?.name || 'None Assigned';
+  const getTeacherInitial = (id: string) => teachers.find((t: any) => t.id === id)?.name?.charAt(0) || '?';
 
   // Filters classes list
-  const filteredClasses = classes.filter(c => 
+  const filteredClasses = classes.filter((c: any) => 
     c.grade.toLowerCase().includes(searchQuery.toLowerCase()) || 
     c.division.toLowerCase().includes(searchQuery.toLowerCase()) ||
     getTeacherName(c.classTeacherId).toLowerCase().includes(searchQuery.toLowerCase())
@@ -200,68 +164,101 @@ export default function ClassesManagement() {
       {!selectedClassId ? (
         // ─── OVERVIEW GRID VIEW ───────────────────────────────────────────────────
         <>
-          <div className="sd-topbar">
-            <div>
-              <h1 className="sd-title">Class Management</h1>
-              <p className="sd-subtitle">Define grades, sections, class teachers and student rosters.</p>
+          {/* Top Navbar Simulation */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '24px', marginBottom: '40px', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            <span style={{ cursor: 'pointer', color: 'var(--primary)' }}>Overview</span>
+            <span style={{ cursor: 'pointer' }}>Reports</span>
+            <span style={{ cursor: 'pointer' }}>Resources</span>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.6)', padding: '8px 16px', borderRadius: '30px', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.8)' }}>
+              <Search size={16} style={{ color: 'var(--text-muted)' }} />
+              <input type="text" placeholder="Search..." style={{ border: 'none', background: 'transparent', outline: 'none', width: '150px' }} />
             </div>
-            <button className="sd-term-chip" onClick={() => setShowCreateModal(true)} style={{ cursor: 'pointer', background: 'var(--primary-purple)', color: 'white' }}>
-              <Plus size={16} style={{ marginRight: 6 }} />
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'var(--primary)' }}>
+              <div style={{ position: 'relative', cursor: 'pointer' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <div style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, background: '#ef4444', borderRadius: '50%', border: '2px solid #fff' }}></div>
+              </div>
+              <div style={{ cursor: 'pointer' }}>
+                <User size={20} />
+              </div>
+              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Profile" style={{ width: 32, height: 32, borderRadius: '50%', border: '2px solid #fff', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', cursor: 'pointer' }} />
+            </div>
+          </div>
+
+          <div className="sd-topbar" style={{ marginBottom: '40px' }}>
+            <div>
+              <h1 className="sd-title" style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-1px', marginBottom: '8px' }}>Class<br/>Management</h1>
+              <p className="sd-subtitle" style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '500px' }}>Oversee rosters, assign educators, and manage curriculum modules.</p>
+            </div>
+          </div>
+
+          {/* Search bar and Create Button */}
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '32px' }}>
+            <div className="sd-section-card" style={{ flex: 1, padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 12, borderRadius: '30px', background: 'rgba(255,255,255,0.9)' }}>
+              <Search size={18} style={{ color: 'var(--text-muted)' }} />
+              <input
+                type="text"
+                placeholder="Search classes, teachers, or students..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.95rem', color: 'var(--text-main)', background: 'transparent' }}
+              />
+            </div>
+            <button 
+              onClick={() => setShowCreateModal(true)} 
+              style={{ cursor: 'pointer', background: 'linear-gradient(135deg, var(--primary), var(--primary-mid))', color: 'white', border: 'none', borderRadius: '30px', padding: '0 32px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 15px rgba(61,82,72,0.3)', transition: 'all 0.2s' }}
+            >
+              <Plus size={18} />
               Create New Class
             </button>
           </div>
 
-          {/* Search bar */}
-          <div className="sd-section-card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Search size={18} style={{ color: 'var(--text-muted)' }} />
-            <input
-              type="text"
-              placeholder="Search classes by grade, division, or class teacher..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.88rem', color: 'var(--text-main)' }}
-            />
-          </div>
-
           {/* Classes Grid */}
-          <div className="sd-kpi-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="sd-kpi-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
             {filteredClasses.map((cls) => {
               const classTeacherName = getTeacherName(cls.classTeacherId);
-              const classTeacherInitial = getTeacherInitial(cls.classTeacherId);
+              const mockPhotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(classTeacherName)}&background=random&color=fff`;
+
               return (
-                <div key={cls.id} className="sd-kpi-card" style={{ flexDirection: 'column', padding: '24px', position: 'relative' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: 16 }}>
-                    <div className="sd-kpi-icon" style={{ background: 'var(--primary-purple-light)', color: 'var(--primary-purple)' }}>
-                      <Layers size={22} />
-                    </div>
-                    <span className="sd-pill sd-pill-blue" style={{ fontSize: '0.7rem' }}>
-                      {cls.students.length} Enrolled
+                <div key={cls.id} className="sd-kpi-card" style={{ flexDirection: 'column', padding: '32px', position: 'relative', borderRadius: '24px', background: '#ffffff' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '24px' }}>
+                    <h3 className="sd-action-label" style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
+                      {cls.grade} -<br/>{cls.division}
+                    </h3>
+                    <span className="sd-pill sd-pill-blue" style={{ fontSize: '0.8rem', fontWeight: 700, padding: '6px 14px', background: 'rgba(61, 82, 72, 0.1)', color: 'var(--primary)' }}>
+                      {cls.students ? cls.students.length : 0} Enrolled
                     </span>
                   </div>
-
-                  <h3 className="sd-action-label" style={{ fontSize: '1.2rem', marginBottom: 6 }}>
-                    {cls.grade} – {cls.division}
-                  </h3>
                   
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, borderTop: '1px solid var(--border-light)', paddingTop: 12, width: '100%' }}>
-                    <div className="sd-avatar" style={{ width: 32, height: 32, fontSize: '0.8rem' }}>{classTeacherInitial}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: 'auto', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '24px', width: '100%' }}>
+                    <img src={mockPhotoUrl} alt={classTeacherName} style={{ width: 44, height: 44, borderRadius: '50%', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 500 }}>CLASS TEACHER</span>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 650, color: 'var(--text-main)' }}>{classTeacherName}</span>
+                      <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>{classTeacherName}</span>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Lead Educator</span>
                     </div>
                   </div>
 
                   <button 
                     onClick={() => { setSelectedClassId(cls.id); setActiveTab('students'); }}
-                    className="sd-link-btn" 
-                    style={{ marginTop: 20, width: '100%', justifyContent: 'center', background: '#fafbfc', border: '1px solid var(--border-light)', padding: '8px', borderRadius: '8px' }}
+                    style={{ marginTop: '24px', width: '100%', justifyContent: 'center', background: 'var(--primary-light)', border: 'none', padding: '12px', borderRadius: '12px', fontWeight: 700, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}
                   >
                     Manage Class Roster
-                    <ChevronRight size={14} style={{ marginLeft: 4 }} />
+                    <ChevronRight size={16} />
                   </button>
                 </div>
               );
             })}
+
+            {/* Draft New Cohort Placeholder */}
+            <div className="sd-kpi-card" style={{ flexDirection: 'column', padding: '32px', position: 'relative', borderRadius: '24px', background: 'rgba(255,255,255,0.4)', border: '2px dashed rgba(61, 82, 72, 0.2)', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onClick={() => setShowCreateModal(true)}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(61, 82, 72, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', marginBottom: '24px' }}>
+                <Plus size={32} />
+              </div>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '8px' }}>Draft New Cohort</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Set up a new curriculum track</p>
+            </div>
           </div>
 
           {/* Empty State */}
@@ -288,118 +285,138 @@ export default function ClassesManagement() {
           </div>
 
           {/* Class Summary Banner */}
-          <div className="sd-section-card" style={{ padding: '24px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, #fff 0%, rgba(88, 63, 192, 0.02) 100%)' }}>
+          <div className="sd-section-card" style={{ padding: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, #3d5248, #6b8c7a)', color: 'white', borderRadius: '16px', boxShadow: '0 16px 32px -8px rgba(61, 82, 72, 0.35)' }}>
             <div>
-              <h1 className="sd-title" style={{ fontSize: '1.8rem', display: 'flex', alignItems: 'center', gap: 12 }}>
-                {activeClass?.grade} - {activeClass?.division}
-                <Sparkles size={20} style={{ color: 'var(--warning-orange)' }} />
-              </h1>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginTop: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <UserCheck size={16} style={{ color: 'var(--primary-purple)' }} />
-                  <span style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
-                    Class Teacher: <strong>{getTeacherName(activeClass?.classTeacherId || '')}</strong>
-                  </span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Users size={16} style={{ color: 'var(--accent-green)' }} />
-                  <span style={{ fontSize: '0.86rem', color: 'var(--text-secondary)' }}>
-                    Total Enrolled: <strong>{activeClass?.students.length} students</strong>
-                  </span>
-                </div>
+              <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.5px' }}>Active Cohort</span>
+                <span style={{ background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.5px' }}>Advanced Track</span>
               </div>
+              <h1 className="sd-title" style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 8px 0', color: 'white', letterSpacing: '-0.5px' }}>
+                {activeClass?.grade} - {activeClass?.division}
+              </h1>
+              <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)', margin: 0 }}>
+                Homeroom: Rm 402 • Capacity: {activeClass?.students?.length || 0}/30
+              </p>
             </div>
-            <div className="sd-avatar" style={{ width: 56, height: 56, fontSize: '1.4rem' }}>
-              {activeClass?.grade.slice(-1)}
+            
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <div style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', minWidth: '110px' }}>
+                <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '4px' }}>98%</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px' }}>Attendance</div>
+              </div>
+              <div style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', minWidth: '110px' }}>
+                <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '4px' }}>4.2</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.5px' }}>Avg GPA</div>
+              </div>
             </div>
           </div>
 
           {/* Tabs Navigation */}
-          <div style={{ display: 'flex', borderBottom: '1px solid var(--border-light)', gap: 24 }}>
+          <div style={{ display: 'flex', borderBottom: '1px solid rgba(0,0,0,0.08)', gap: '32px', padding: '0 8px', marginBottom: '32px', marginTop: '16px' }}>
             <button
               onClick={() => setActiveTab('students')}
-              className={`sd-link-btn ${activeTab === 'students' ? 'active' : ''}`}
               style={{
                 fontSize: '0.9rem',
-                padding: '12px 4px',
-                borderBottom: activeTab === 'students' ? '2.5px solid var(--primary-purple)' : 'none',
+                padding: '16px 4px',
+                background: 'none',
+                border: 'none',
+                borderBottom: activeTab === 'students' ? '3px solid var(--primary)' : '3px solid transparent',
                 borderRadius: 0,
-                fontWeight: activeTab === 'students' ? 700 : 500,
-                color: activeTab === 'students' ? 'var(--primary-purple)' : 'var(--text-secondary)',
-                opacity: 1
+                fontWeight: activeTab === 'students' ? 800 : 600,
+                color: activeTab === 'students' ? 'var(--primary)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
               }}
             >
-              <Users size={16} style={{ marginRight: 6 }} />
               Students Roster
             </button>
             <button
               onClick={() => setActiveTab('subjects')}
-              className={`sd-link-btn ${activeTab === 'subjects' ? 'active' : ''}`}
               style={{
                 fontSize: '0.9rem',
-                padding: '12px 4px',
-                borderBottom: activeTab === 'subjects' ? '2.5px solid var(--primary-purple)' : 'none',
+                padding: '16px 4px',
+                background: 'none',
+                border: 'none',
+                borderBottom: activeTab === 'subjects' ? '3px solid var(--primary)' : '3px solid transparent',
                 borderRadius: 0,
-                fontWeight: activeTab === 'subjects' ? 700 : 500,
-                color: activeTab === 'subjects' ? 'var(--primary-purple)' : 'var(--text-secondary)',
-                opacity: 1
+                fontWeight: activeTab === 'subjects' ? 800 : 600,
+                color: activeTab === 'subjects' ? 'var(--primary)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
               }}
             >
-              <BookOpen size={16} style={{ marginRight: 6 }} />
               Subject Teachers
+            </button>
+            <button
+              style={{
+                fontSize: '0.9rem',
+                padding: '16px 4px',
+                background: 'none',
+                border: 'none',
+                borderBottom: '3px solid transparent',
+                borderRadius: 0,
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                cursor: 'not-allowed',
+                opacity: 0.7
+              }}
+            >
+              Curriculum Mapping
             </button>
           </div>
 
           {/* TAB CONTENTS */}
           {activeTab === 'students' ? (
-            <div className="sd-section-card">
-              <div className="sd-section-header">
-                <span className="sd-section-title">Students Enrolled</span>
-                <button className="sd-term-chip" onClick={() => setShowAddStudentModal(true)} style={{ cursor: 'pointer', background: 'var(--primary-purple-light)', color: 'var(--primary-purple)', border: '1px solid rgba(88, 63, 192, 0.15)' }}>
-                  <Plus size={14} style={{ marginRight: 4 }} />
+            <div className="sd-section-card" style={{ background: '#ffffff', borderRadius: '24px', padding: '32px' }}>
+              <div className="sd-section-header" style={{ marginBottom: '24px', background: 'transparent', padding: 0, border: 'none' }}>
+                <span className="sd-section-title" style={{ fontSize: '1.4rem', fontWeight: 800 }}>Enrolled Students</span>
+                <button className="sd-term-chip" onClick={() => setShowAddStudentModal(true)} style={{ cursor: 'pointer', background: 'transparent', color: 'var(--primary)', border: '1px solid rgba(61, 82, 72, 0.2)', padding: '8px 16px', borderRadius: '20px', fontWeight: 600 }}>
+                  <UserCheck size={14} style={{ marginRight: 6 }} />
                   Enroll Student
                 </button>
               </div>
 
-              <div className="sd-table-wrapper">
-                <table className="sd-table">
+              <div className="sd-table-wrapper" style={{ margin: '0 -16px', paddingBottom: 0 }}>
+                <table className="sd-table" style={{ borderSpacing: '0 12px', borderCollapse: 'separate', width: '100%', padding: '0 16px' }}>
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Date of Birth</th>
-                      <th>Grade</th>
-                      <th style={{ textAlign: 'right' }}>Actions</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>Student Name</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>Email Contact</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>DOB</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>Grade Level</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px', textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {activeClass?.students.map(stId => {
+                    {activeClass?.students?.map((stId: any) => {
                       const studentObj = students.find(s => s.id === stId);
                       if (!studentObj) return null;
                       return (
-                        <tr key={stId} className="sd-table-row">
-                          <td className="sd-table-strong">
-                            <div className="sd-teacher-cell">
-                              <div className="sd-avatar">{studentObj.name.charAt(0)}</div>
-                              {studentObj.name}
+                        <tr key={stId} className="sd-table-row" style={{ background: 'var(--primary-light)' }}>
+                          <td className="sd-table-strong" style={{ padding: '16px', borderTopLeftRadius: '12px', borderBottomLeftRadius: '12px', borderTop: 'none', borderBottom: 'none' }}>
+                            <div className="sd-teacher-cell" style={{ gap: '16px' }}>
+                              <div className="sd-avatar" style={{ background: '#ffffff', color: 'var(--primary)', fontWeight: 700, border: 'none' }}>{studentObj.name.charAt(0)}{studentObj.name.split(' ')[1]?.charAt(0)}</div>
+                              <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{studentObj.name}</span>
                             </div>
                           </td>
-                          <td>{studentObj.email}</td>
-                          <td>{studentObj.dob}</td>
-                          <td>{studentObj.grade}</td>
-                          <td style={{ textAlign: 'right' }}>
+                          <td style={{ padding: '16px', color: 'var(--text-secondary)', borderTop: 'none', borderBottom: 'none' }}>{studentObj.email}</td>
+                          <td style={{ padding: '16px', color: 'var(--text-secondary)', borderTop: 'none', borderBottom: 'none' }}>{studentObj.dob}</td>
+                          <td style={{ padding: '16px', borderTop: 'none', borderBottom: 'none' }}>
+                            <span style={{ background: '#f5e6a0', color: '#7a5c00', padding: '4px 10px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: 700 }}>{studentObj.grade}</span>
+                          </td>
+                          <td style={{ textAlign: 'right', padding: '16px', borderTopRightRadius: '12px', borderBottomRightRadius: '12px', borderTop: 'none', borderBottom: 'none' }}>
                             <button
                               onClick={() => handleRemoveStudentFromClass(stId)}
-                              style={{ background: 'none', border: 'none', color: 'var(--danger-red)', cursor: 'pointer', padding: 6 }}
+                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 8, opacity: 0.8 }}
                               title="Remove from Class"
                             >
-                              <Trash2 size={16} />
+                              <Trash2 size={18} />
                             </button>
                           </td>
                         </tr>
                       );
                     })}
-                    {activeClass?.students.length === 0 && (
+                    {(!activeClass?.students || activeClass.students.length === 0) && (
                       <tr>
                         <td colSpan={5} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
                           No students currently enrolled in this class.
@@ -411,57 +428,57 @@ export default function ClassesManagement() {
               </div>
             </div>
           ) : (
-            <div className="sd-section-card">
-              <div className="sd-section-header">
-                <span className="sd-section-title">Subject Mapping</span>
-                <button className="sd-term-chip" onClick={() => setShowAssignSubjectModal(true)} style={{ cursor: 'pointer', background: 'var(--primary-purple-light)', color: 'var(--primary-purple)', border: '1px solid rgba(88, 63, 192, 0.15)' }}>
-                  <Plus size={14} style={{ marginRight: 4 }} />
+            <div className="sd-section-card" style={{ background: '#ffffff', borderRadius: '24px', padding: '32px' }}>
+              <div className="sd-section-header" style={{ marginBottom: '24px', background: 'transparent', padding: 0, border: 'none' }}>
+                <span className="sd-section-title" style={{ fontSize: '1.4rem', fontWeight: 800 }}>Subject Mapping</span>
+                <button className="sd-term-chip" onClick={() => setShowAssignSubjectModal(true)} style={{ cursor: 'pointer', background: 'transparent', color: 'var(--primary)', border: '1px solid rgba(61, 82, 72, 0.2)', padding: '8px 16px', borderRadius: '20px', fontWeight: 600 }}>
+                  <Plus size={14} style={{ marginRight: 6 }} />
                   Assign Subject Teacher
                 </button>
               </div>
 
-              <div className="sd-table-wrapper">
-                <table className="sd-table">
+              <div className="sd-table-wrapper" style={{ margin: '0 -16px', paddingBottom: 0 }}>
+                <table className="sd-table" style={{ borderSpacing: '0 12px', borderCollapse: 'separate', width: '100%', padding: '0 16px' }}>
                   <thead>
                     <tr>
-                      <th>Subject</th>
-                      <th>Assigned Teacher</th>
-                      <th>Expertise / Department</th>
-                      <th style={{ textAlign: 'right' }}>Actions</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>Subject</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>Assigned Teacher</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px' }}>Expertise / Department</th>
+                      <th style={{ padding: '0 16px 8px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-main)', border: 'none', textTransform: 'none', letterSpacing: '0.5px', textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {activeClass?.subjectTeachers.map((subj, idx) => (
-                      <tr key={idx} className="sd-table-row">
-                        <td className="sd-table-strong">
+                    {activeClass?.subjectTeachers?.map((subj: any, idx: number) => (
+                      <tr key={idx} className="sd-table-row" style={{ background: 'var(--primary-light)' }}>
+                        <td className="sd-table-strong" style={{ padding: '16px', borderTopLeftRadius: '12px', borderBottomLeftRadius: '12px', borderTop: 'none', borderBottom: 'none' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <Tag size={14} style={{ color: 'var(--primary-purple)' }} />
+                            <Tag size={14} style={{ color: 'var(--primary)' }} />
                             {subj.subject}
                           </div>
                         </td>
-                        <td>
+                        <td style={{ padding: '16px', borderTop: 'none', borderBottom: 'none' }}>
                           <div className="sd-teacher-cell">
-                            <div className="sd-avatar">{getTeacherInitial(subj.teacherId)}</div>
-                            {getTeacherName(subj.teacherId)}
+                            <div className="sd-avatar" style={{ background: '#ffffff', color: 'var(--primary)', border: 'none' }}>{getTeacherInitial(subj.teacherId)}</div>
+                            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{getTeacherName(subj.teacherId)}</span>
                           </div>
                         </td>
-                        <td>
+                        <td style={{ padding: '16px', borderTop: 'none', borderBottom: 'none' }}>
                           <span className="sd-pill sd-pill-blue">
-                            {teachers.find(t => t.id === subj.teacherId)?.expertise}
+                            {teachers.find((t: any) => t.id === subj.teacherId)?.expertise || 'Expert'}
                           </span>
                         </td>
-                        <td style={{ textAlign: 'right' }}>
+                        <td style={{ textAlign: 'right', padding: '16px', borderTopRightRadius: '12px', borderBottomRightRadius: '12px', borderTop: 'none', borderBottom: 'none' }}>
                           <button
                             onClick={() => handleRemoveSubjectAssignment(subj.subject)}
-                            style={{ background: 'none', border: 'none', color: 'var(--danger-red)', cursor: 'pointer', padding: 6 }}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 8, opacity: 0.8 }}
                             title="Unassign Subject"
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={18} />
                           </button>
                         </td>
                       </tr>
                     ))}
-                    {activeClass?.subjectTeachers.length === 0 && (
+                    {(!activeClass?.subjectTeachers || activeClass.subjectTeachers.length === 0) && (
                       <tr>
                         <td colSpan={4} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
                           No subject teachers assigned yet.
@@ -480,8 +497,8 @@ export default function ClassesManagement() {
       
       {/* 1. Create Class Modal */}
       {showCreateModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifycontent: 'center', padding: 20 }}>
+          <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px', margin: 'auto' }}>
             <h2 className="sd-title" style={{ fontSize: '1.3rem', marginBottom: 6 }}>Create New Class</h2>
             <p className="sd-subtitle" style={{ marginBottom: 20 }}>Specify class details and assign a class teacher.</p>
             
@@ -493,7 +510,7 @@ export default function ClassesManagement() {
                   onChange={(e) => setNewClass({ ...newClass, grade: e.target.value })}
                   style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-light)', outline: 'none', fontSize: '0.88rem' }}
                 >
-                  {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6'].map(y => (
+                  {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12'].map(y => (
                     <option key={y} value={y}>{y}</option>
                   ))}
                 </select>
@@ -518,7 +535,8 @@ export default function ClassesManagement() {
                   onChange={(e) => setNewClass({ ...newClass, classTeacherId: e.target.value })}
                   style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-light)', outline: 'none', fontSize: '0.88rem' }}
                 >
-                  {teachers.map(t => (
+                  <option value="">-- Assign Teacher --</option>
+                  {teachers.map((t: any) => (
                     <option key={t.id} value={t.id}>{t.name}</option>
                   ))}
                 </select>
@@ -528,7 +546,7 @@ export default function ClassesManagement() {
                 <button type="button" onClick={() => setShowCreateModal(false)} style={{ flex: 1, padding: 12, border: '1px solid var(--border-light)', borderRadius: 8, background: '#fafbfc', cursor: 'pointer', fontWeight: 600 }}>
                   Cancel
                 </button>
-                <button type="submit" style={{ flex: 1, padding: 12, border: 'none', borderRadius: 8, background: 'var(--primary-purple)', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" style={{ flex: 1, padding: 12, border: 'none', borderRadius: 8, background: 'var(--primary)', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
                   Create Class
                 </button>
               </div>
@@ -539,8 +557,8 @@ export default function ClassesManagement() {
 
       {/* 2. Enroll Student Modal */}
       {showAddStudentModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifycontent: 'center', padding: 20 }}>
+          <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px', margin: 'auto' }}>
             <h2 className="sd-title" style={{ fontSize: '1.3rem', marginBottom: 6 }}>Enroll Student</h2>
             <p className="sd-subtitle" style={{ marginBottom: 20 }}>Select an existing student to enroll into this class.</p>
             
@@ -554,9 +572,8 @@ export default function ClassesManagement() {
                   style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-light)', outline: 'none', fontSize: '0.88rem' }}
                 >
                   <option value="">-- Select Student --</option>
-                  {/* Filter out students already in this class */}
                   {students
-                    .filter(st => !activeClass?.students.includes(st.id))
+                    .filter(st => !activeClass?.students?.includes(st.id))
                     .map(st => (
                       <option key={st.id} value={st.id}>{st.name} ({st.grade})</option>
                     ))
@@ -568,7 +585,7 @@ export default function ClassesManagement() {
                 <button type="button" onClick={() => setShowAddStudentModal(false)} style={{ flex: 1, padding: 12, border: '1px solid var(--border-light)', borderRadius: 8, background: '#fafbfc', cursor: 'pointer', fontWeight: 600 }}>
                   Cancel
                 </button>
-                <button type="submit" style={{ flex: 1, padding: 12, border: 'none', borderRadius: 8, background: 'var(--primary-purple)', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" style={{ flex: 1, padding: 12, border: 'none', borderRadius: 8, background: 'var(--primary)', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
                   Add to Class
                 </button>
               </div>
@@ -579,8 +596,8 @@ export default function ClassesManagement() {
 
       {/* 3. Assign Subject Teacher Modal */}
       {showAssignSubjectModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifycontent: 'center', padding: 20 }}>
+          <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px', margin: 'auto' }}>
             <h2 className="sd-title" style={{ fontSize: '1.3rem', marginBottom: 6 }}>Assign Subject Teacher</h2>
             <p className="sd-subtitle" style={{ marginBottom: 20 }}>Specify a subject and select the teacher to teach it in this class.</p>
             
@@ -604,8 +621,9 @@ export default function ClassesManagement() {
                   onChange={(e) => setNewSubject({ ...newSubject, teacherId: e.target.value })}
                   style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-light)', outline: 'none', fontSize: '0.88rem' }}
                 >
-                  {teachers.map(t => (
-                    <option key={t.id} value={t.id}>{t.name} ({t.expertise})</option>
+                  <option value="">-- Assign Teacher --</option>
+                  {teachers.map((t: any) => (
+                    <option key={t.id} value={t.id}>{t.name} ({t.expertise || 'Expertise'})</option>
                   ))}
                 </select>
               </div>
@@ -614,7 +632,7 @@ export default function ClassesManagement() {
                 <button type="button" onClick={() => setShowAssignSubjectModal(false)} style={{ flex: 1, padding: 12, border: '1px solid var(--border-light)', borderRadius: 8, background: '#fafbfc', cursor: 'pointer', fontWeight: 600 }}>
                   Cancel
                 </button>
-                <button type="submit" style={{ flex: 1, padding: 12, border: 'none', borderRadius: 8, background: 'var(--primary-purple)', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" style={{ flex: 1, padding: 12, border: 'none', borderRadius: 8, background: 'var(--primary)', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
                   Assign Teacher
                 </button>
               </div>
