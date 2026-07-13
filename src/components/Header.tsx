@@ -5,6 +5,7 @@ interface HeaderProps {
   currentPage: string;
   currentSubpage: string;
   onLogout: () => void;
+  onProfileClick: () => void;
   selectedChild: string;
   setSelectedChild: (child: string) => void;
   loggedInUser: string;
@@ -14,6 +15,7 @@ export default function Header({
   currentPage, 
   currentSubpage, 
   onLogout,
+  onProfileClick,
   selectedChild,
   setSelectedChild,
   loggedInUser
@@ -155,6 +157,7 @@ export default function Header({
               <button
                 onClick={() => {
                   setShowUserDropdown(false);
+                  onProfileClick();
                 }}
                 style={{
                   display: 'flex',

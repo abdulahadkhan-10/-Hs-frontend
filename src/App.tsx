@@ -12,6 +12,7 @@ import TeachersManagement from './pages/school/TeachersManagement';
 import SafeguardingOverview from './pages/SafeguardingOverview';
 import SafeguardingSubpages from './pages/SafeguardingSubpages';
 import OtherPages from './pages/OtherPages';
+import ProfilePage from './pages/ProfilePage';
 import { Toaster } from 'sonner';
 
 // Auth Pages
@@ -90,6 +91,11 @@ export default function App() {
     }
   };
 
+  const handleProfileClick = () => {
+    setCurrentPage('profile');
+    setCurrentSubpage('');
+  };
+
   const renderContent = () => {
     if (!isAuthenticated) {
       if (authRoute === '/login-school') {
@@ -135,7 +141,8 @@ export default function App() {
           <Header 
             currentPage={currentPage} 
             currentSubpage={currentSubpage} 
-            onLogout={handleLogout} 
+            onLogout={handleLogout}
+            onProfileClick={handleProfileClick}
             selectedChild={selectedChild}
             setSelectedChild={setSelectedChild}
             loggedInUser={loggedInUser}
@@ -162,7 +169,11 @@ export default function App() {
               <TeachersManagement />
             )}
 
-            {currentPage !== 'home' && currentPage !== 'safeguarding' && currentPage !== 'school-classes' && currentPage !== 'school-users' && (
+            {currentPage === 'profile' && (
+              <ProfilePage />
+            )}
+
+            {currentPage !== 'home' && currentPage !== 'safeguarding' && currentPage !== 'school-classes' && currentPage !== 'school-users' && currentPage !== 'profile' && (
               <OtherPages pageId={currentPage} />
             )}
           </div>

@@ -9,17 +9,13 @@ import {
 import { toast } from 'sonner';
 import {
   Layers,
-  Users,
   Plus,
-  BookOpen,
   ArrowLeft,
   Search,
   Trash2,
   ChevronRight,
-  Sparkles,
   UserCheck,
-  Tag,
-  User
+  Tag
 } from 'lucide-react';
 
 // ─── Initial Mock Data ────────────────────────────────────────────────────────
@@ -475,7 +471,7 @@ export default function ClassesManagement() {
       
       {/* 1. Create Class Modal */}
       {showCreateModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifycontent: 'center', padding: 20 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px', margin: 'auto' }}>
             <h2 className="sd-title" style={{ fontSize: '1.3rem', marginBottom: 6 }}>Create New Class</h2>
             <p className="sd-subtitle" style={{ marginBottom: 20 }}>Specify class details and assign a class teacher.</p>
@@ -536,7 +532,7 @@ export default function ClassesManagement() {
 
       {/* 2. Enroll Student Modal */}
       {showAddStudentModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifycontent: 'center', padding: 20 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px', margin: 'auto' }}>
             <h2 className="sd-title" style={{ fontSize: '1.3rem', marginBottom: 6 }}>Enroll Student</h2>
             <p className="sd-subtitle" style={{ marginBottom: 20 }}>Select an existing student to enroll into this class.</p>
@@ -575,7 +571,7 @@ export default function ClassesManagement() {
 
       {/* 3. Assign Subject Teacher Modal */}
       {showAssignSubjectModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifycontent: 'center', padding: 20 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div className="sd-section-card" style={{ maxWidth: 460, width: '100%', padding: '24px 30px', margin: 'auto' }}>
             <h2 className="sd-title" style={{ fontSize: '1.3rem', marginBottom: 6 }}>Assign Subject Teacher</h2>
             <p className="sd-subtitle" style={{ marginBottom: 20 }}>Specify a subject and select the teacher to teach it in this class.</p>

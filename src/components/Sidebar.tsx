@@ -29,16 +29,10 @@ interface SidebarProps {
 
 export default function Sidebar({ currentPage, currentSubpage, onPageChange, userRole }: SidebarProps) {
   const [safeguardingOpen, setSafeguardingOpen] = useState(currentPage === 'safeguarding');
-  const [schoolUsersOpen, setSchoolUsersOpen] = useState(currentPage === 'school-users');
 
   const handleSafeguardingClick = () => {
     setSafeguardingOpen(!safeguardingOpen);
     onPageChange('safeguarding', 'overview');
-  };
-
-  const handleSchoolUsersClick = () => {
-    setSchoolUsersOpen(!schoolUsersOpen);
-    onPageChange('school-users', 'teachers');
   };
 
   const isSchool = userRole === 'SCHOOL';
@@ -150,7 +144,7 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
             <li className="menu-item-wrapper">
               <button
                 onClick={() => onPageChange('settings')}
-                className={`sidebar-link ${currentPage === 'settings' ? 'active' : ''}`}
+                className={`sidebar-link ${currentPage === 'settings' || currentPage === 'profile' ? 'active' : ''}`}
               >
                 <Settings size={18} />
                 <span>Settings</span>
@@ -229,7 +223,7 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
             <li className="menu-item-wrapper">
               <button
                 onClick={() => onPageChange('school-settings')}
-                className={`sidebar-link ${currentPage === 'school-settings' ? 'active' : ''}`}
+                className={`sidebar-link ${currentPage === 'school-settings' || currentPage === 'profile' ? 'active' : ''}`}
               >
                 <Settings size={18} />
                 <span>Settings</span>
