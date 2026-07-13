@@ -14,7 +14,8 @@ import {
   ShieldCheck, 
   Settings, 
   ChevronRight, 
-  HelpCircle
+  HelpCircle,
+  GraduationCap
 } from 'lucide-react';
 
 import { Layers, FileCheck } from 'lucide-react';
@@ -169,45 +170,37 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
               </button>
             </li>
 
-            {/* School User Management Dropdown */}
+            {/* Teachers Link */}
             <li className="menu-item-wrapper">
               <button
-                onClick={handleSchoolUsersClick}
-                className={`sidebar-link ${currentPage === 'school-users' ? 'active' : ''} ${schoolUsersOpen ? 'open' : ''}`}
+                onClick={() => onPageChange('school-users', 'teachers')}
+                className={`sidebar-link ${currentPage === 'school-users' && currentSubpage === 'teachers' ? 'active' : ''}`}
               >
                 <Users size={18} />
-                <span>User Management</span>
-                <ChevronRight size={14} className="chevron" />
+                <span>Teachers</span>
               </button>
-              
-              {schoolUsersOpen && (
-                <ul className="submenu-list">
-                  <li>
-                    <button
-                      onClick={() => onPageChange('school-users', 'teachers')}
-                      className={`submenu-link ${currentSubpage === 'teachers' ? 'active' : ''}`}
-                    >
-                      Teachers
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onPageChange('school-users', 'students')}
-                      className={`submenu-link ${currentSubpage === 'students' ? 'active' : ''}`}
-                    >
-                      Students
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onPageChange('school-users', 'safeguards')}
-                      className={`submenu-link ${currentSubpage === 'safeguards' ? 'active' : ''}`}
-                    >
-                      Safeguards
-                    </button>
-                  </li>
-                </ul>
-              )}
+            </li>
+
+            {/* Students Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('school-users', 'students')}
+                className={`sidebar-link ${currentPage === 'school-users' && currentSubpage === 'students' ? 'active' : ''}`}
+              >
+                <GraduationCap size={18} />
+                <span>Students</span>
+              </button>
+            </li>
+
+            {/* Safeguards Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('school-users', 'safeguards')}
+                className={`sidebar-link ${currentPage === 'school-users' && currentSubpage === 'safeguards' ? 'active' : ''}`}
+              >
+                <ShieldCheck size={18} />
+                <span>Safeguards</span>
+              </button>
             </li>
 
             {/* Classes Link */}
