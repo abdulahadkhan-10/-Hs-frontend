@@ -167,7 +167,10 @@ export default function ClassesManagement() {
 
           <div className="sd-topbar" style={{ marginBottom: '24px' }}>
             <div>
-              <h1 className="sd-title" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '-0.5px', marginBottom: '6px' }}>Class Management</h1>
+  <h1 className="sd-title" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '10px', letterSpacing: '-0.5px' }}>
+                <Layers size={26} />
+                Class Management
+                </h1>
               <p className="sd-subtitle" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', maxWidth: '500px' }}>Oversee rosters, assign educators, and manage curriculum modules.</p>
             </div>
           </div>

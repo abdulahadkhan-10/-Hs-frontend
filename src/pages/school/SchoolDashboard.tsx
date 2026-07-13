@@ -9,7 +9,8 @@ import {
   TrendingUp,
   ChevronRight,
   CheckCircle2,
-  Clock
+  Clock,
+  Home
 } from 'lucide-react';
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
@@ -109,7 +110,10 @@ export default function SchoolDashboard() {
       {/* ── Header Row ────────────────────────────────────────────── */}
       <div className="sd-topbar">
         <div>
-          <h1 className="sd-title">School Dashboard</h1>
+          <h1 className="sd-title" style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '10px', letterSpacing: '-0.5px' }}>
+
+           <Home size={26} />
+          School Dashboard</h1>
           <p className="sd-subtitle">{today}</p>
         </div>
       
