@@ -324,7 +324,7 @@ export default function ResetPassword() {
                     <input
                       type="email"
                       className="reset-input"
-                      placeholder="akshat.g10b14kis@gmail.com"
+                      placeholder="Enter your email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isLoading}
