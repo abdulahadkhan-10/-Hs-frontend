@@ -9,6 +9,8 @@ import Home from './pages/Home';
 import SchoolDashboard from './pages/school/SchoolDashboard';
 import ClassesManagement from './pages/school/ClassesManagement';
 import TeachersManagement from './pages/school/TeachersManagement';
+import AdminRequests from './pages/school/AdminRequests';
+import SchoolSettings from './pages/school/SchoolSettings';
 import SafeguardingOverview from './pages/SafeguardingOverview';
 import SafeguardingSubpages from './pages/SafeguardingSubpages';
 import OtherPages from './pages/OtherPages';
@@ -157,6 +159,14 @@ export default function App() {
               <ClassesManagement />
             )}
 
+            {currentPage === 'school-requests' && (
+              <AdminRequests />
+            )}
+
+            {currentPage === 'school-settings' && (
+              <SchoolSettings />
+            )}
+
             {currentPage === 'safeguarding' && currentSubpage === 'overview' && (
               <SafeguardingOverview onPageChange={handlePageChange} />
             )}
@@ -173,7 +183,12 @@ export default function App() {
               <ProfilePage />
             )}
 
-            {currentPage !== 'home' && currentPage !== 'safeguarding' && currentPage !== 'school-classes' && currentPage !== 'school-users' && currentPage !== 'profile' && (
+            {currentPage !== 'home' && 
+             currentPage !== 'safeguarding' && 
+             currentPage !== 'school-classes' && 
+             currentPage !== 'school-requests' && 
+             currentPage !== 'school-settings' && 
+             currentPage !== 'school-users' && currentPage !== 'profile' && (
               <OtherPages pageId={currentPage} />
             )}
           </div>
