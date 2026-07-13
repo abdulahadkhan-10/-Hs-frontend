@@ -89,7 +89,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['User'],
+  tagTypes: ['User', 'Teachers'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, any>({
       query: (credentials) => ({

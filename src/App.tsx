@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import SchoolDashboard from './pages/school/SchoolDashboard';
 import ClassesManagement from './pages/school/ClassesManagement';
+import TeachersManagement from './pages/school/TeachersManagement';
 import SafeguardingOverview from './pages/SafeguardingOverview';
 import SafeguardingSubpages from './pages/SafeguardingSubpages';
 import OtherPages from './pages/OtherPages';
@@ -157,7 +158,11 @@ export default function App() {
               <SafeguardingSubpages subpage={currentSubpage} />
             )}
 
-            {currentPage !== 'home' && currentPage !== 'safeguarding' && currentPage !== 'school-classes' && (
+            {currentPage === 'school-users' && currentSubpage === 'teachers' && (
+              <TeachersManagement />
+            )}
+
+            {currentPage !== 'home' && currentPage !== 'safeguarding' && currentPage !== 'school-classes' && currentPage !== 'school-users' && (
               <OtherPages pageId={currentPage} />
             )}
           </div>

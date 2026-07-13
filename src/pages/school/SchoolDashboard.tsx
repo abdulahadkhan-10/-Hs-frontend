@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Users,
   GraduationCap,
@@ -8,12 +7,9 @@ import {
   UserPlus,
   BookOpen,
   TrendingUp,
-  Activity,
   ChevronRight,
-  AlertCircle,
   CheckCircle2,
-  Clock,
-  MoreHorizontal
+  Clock
 } from 'lucide-react';
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
