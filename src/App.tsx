@@ -17,6 +17,18 @@ import OtherPages from './pages/OtherPages';
 import ProfilePage from './pages/ProfilePage';
 import { Toaster } from 'sonner';
 
+// Teacher Pages
+import TeacherDashboard from './pages/teacher/TeacherDashboard';
+import TeacherClasses from './pages/teacher/TeacherClasses';
+import TeacherLessons from './pages/teacher/TeacherLessons';
+import TeacherAssignments from './pages/teacher/TeacherAssignments';
+import TeacherSafeguarding from './pages/teacher/TeacherSafeguarding';
+import TeacherReports from './pages/teacher/TeacherReports';
+import TeacherMessages from './pages/teacher/TeacherMessages';
+import TeacherSettings from './pages/teacher/TeacherSettings';
+import TeacherMyClassroom from './pages/teacher/TeacherMyClassroom';
+
+
 // Auth Pages
 import LandingPage from './pages/LandingPage';
 import SchoolLogin from './pages/auth/SchoolLogin';
@@ -153,7 +165,8 @@ export default function App() {
 
           <div className="app-body">
             {currentPage === 'home' && (
-              user?.role === 'SCHOOL' ? <SchoolDashboard /> : <Home />
+              user?.role === 'SCHOOL' ? <SchoolDashboard /> : 
+              user?.role === 'TEACHER' ? <TeacherDashboard onNavigate={handlePageChange} /> : <Home />
             )}
 
             {currentPage === 'school-classes' && (
@@ -166,6 +179,38 @@ export default function App() {
 
             {currentPage === 'school-settings' && (
               <SchoolSettings />
+            )}
+
+            {currentPage === 'teacher-my-classroom' && (
+              <TeacherMyClassroom />
+            )}
+
+            {currentPage === 'teacher-classes' && (
+              <TeacherClasses />
+            )}
+
+            {currentPage === 'teacher-lessons' && (
+              <TeacherLessons />
+            )}
+
+            {currentPage === 'teacher-assignments' && (
+              <TeacherAssignments />
+            )}
+
+            {currentPage === 'teacher-safeguarding' && (
+              <TeacherSafeguarding />
+            )}
+
+            {currentPage === 'teacher-reports' && (
+              <TeacherReports />
+            )}
+
+            {currentPage === 'teacher-messages' && (
+              <TeacherMessages />
+            )}
+
+            {currentPage === 'teacher-settings' && (
+              <TeacherSettings />
             )}
 
             {currentPage === 'safeguarding' && currentSubpage === 'overview' && (
@@ -189,7 +234,16 @@ export default function App() {
              currentPage !== 'school-classes' && 
              currentPage !== 'school-requests' && 
              currentPage !== 'school-settings' && 
-             currentPage !== 'school-users' && currentPage !== 'profile' && (
+             currentPage !== 'school-users' && 
+             currentPage !== 'profile' && 
+             currentPage !== 'teacher-classes' &&
+             currentPage !== 'teacher-lessons' &&
+             currentPage !== 'teacher-assignments' &&
+             currentPage !== 'teacher-safeguarding' &&
+             currentPage !== 'teacher-reports' &&
+             currentPage !== 'teacher-messages' &&
+             currentPage !== 'teacher-settings' && 
+             currentPage !== 'teacher-my-classroom' && (
               <OtherPages pageId={currentPage} />
             )}
           </div>

@@ -20,6 +20,9 @@ import {
 
 import { Layers, FileCheck } from 'lucide-react';
 
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+
 interface SidebarProps {
   currentPage: string;
   currentSubpage: string;
@@ -29,6 +32,7 @@ interface SidebarProps {
 
 export default function Sidebar({ currentPage, currentSubpage, onPageChange, userRole }: SidebarProps) {
   const [safeguardingOpen, setSafeguardingOpen] = useState(currentPage === 'safeguarding');
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleSafeguardingClick = () => {
     setSafeguardingOpen(!safeguardingOpen);
@@ -36,6 +40,7 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
   };
 
   const isSchool = userRole === 'SCHOOL';
+  const isTeacher = userRole === 'TEACHER';
 
   // Default menu items for standard users (Parents/Students)
   const defaultNavItems = [
@@ -65,7 +70,110 @@ export default function Sidebar({ currentPage, currentSubpage, onPageChange, use
 
       {/* Navigation List */}
       <ul className="sidebar-menu">
-        {!isSchool ? (
+        {isTeacher ? (
+          <>
+            {/* Teacher Dashboard Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('home')}
+                className={`sidebar-link ${currentPage === 'home' ? 'active' : ''}`}
+              >
+                <Home size={18} />
+                <span>Dashboard</span>
+              </button>
+            </li>
+
+            {/* My Classroom Link (Only if class teacher) */}
+            {user?.profile?.classTeacherOf?.length > 0 && (
+              <li className="menu-item-wrapper">
+                <button
+                  onClick={() => onPageChange('teacher-my-classroom')}
+                  className={`sidebar-link ${currentPage === 'teacher-my-classroom' ? 'active' : ''}`}
+                >
+                  <GraduationCap size={18} />
+                  <span>My Classroom</span>
+                </button>
+              </li>
+            )}
+
+            {/* My Classes Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-classes')}
+                className={`sidebar-link ${currentPage === 'teacher-classes' ? 'active' : ''}`}
+              >
+                <Users size={18} />
+                <span>My Classes</span>
+              </button>
+            </li>
+
+            {/* Lessons & Timetable Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-lessons')}
+                className={`sidebar-link ${currentPage === 'teacher-lessons' ? 'active' : ''}`}
+              >
+                <Calendar size={18} />
+                <span>Lessons & Attendance</span>
+              </button>
+            </li>
+
+            {/* Assignments & Grading Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-assignments')}
+                className={`sidebar-link ${currentPage === 'teacher-assignments' ? 'active' : ''}`}
+              >
+                <FileText size={18} />
+                <span>Assignments & Grading</span>
+              </button>
+            </li>
+
+            {/* Safeguarding Concerns Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-safeguarding')}
+                className={`sidebar-link ${currentPage === 'teacher-safeguarding' ? 'active' : ''}`}
+              >
+                <ShieldCheck size={18} />
+                <span>Safeguarding Logs</span>
+              </button>
+            </li>
+
+            {/* Reports & Analytics Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-reports')}
+                className={`sidebar-link ${currentPage === 'teacher-reports' ? 'active' : ''}`}
+              >
+                <BarChart2 size={18} />
+                <span>Reports & Analytics</span>
+              </button>
+            </li>
+
+            {/* Messages Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-messages')}
+                className={`sidebar-link ${currentPage === 'teacher-messages' ? 'active' : ''}`}
+              >
+                <MessageSquare size={18} />
+                <span>Messages</span>
+              </button>
+            </li>
+
+            {/* Profile Settings Link */}
+            <li className="menu-item-wrapper">
+              <button
+                onClick={() => onPageChange('teacher-settings')}
+                className={`sidebar-link ${currentPage === 'teacher-settings' || currentPage === 'profile' ? 'active' : ''}`}
+              >
+                <Settings size={18} />
+                <span>Profile Settings</span>
+              </button>
+            </li>
+          </>
+        ) : !isSchool ? (
           <>
             {defaultNavItems.map((item) => {
               const Icon = item.icon;

@@ -13,12 +13,12 @@ interface HeaderProps {
 }
 
 export default function Header({ 
-  currentPage, 
-  currentSubpage, 
+  currentPage: _currentPage, 
+  currentSubpage: _currentSubpage, 
   onLogout,
   onProfileClick,
-  selectedChild,
-  setSelectedChild,
+  selectedChild: _selectedChild,
+  setSelectedChild: _setSelectedChild,
   loggedInUser,
   userRole
 }: HeaderProps) {
