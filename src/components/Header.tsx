@@ -9,6 +9,7 @@ interface HeaderProps {
   selectedChild: string;
   setSelectedChild: (child: string) => void;
   loggedInUser: string;
+  userRole?: string;
 }
 
 export default function Header({ 
@@ -18,86 +19,17 @@ export default function Header({
   onProfileClick,
   selectedChild,
   setSelectedChild,
-  loggedInUser
+  loggedInUser,
+  userRole
 }: HeaderProps) {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [showChildDropdown, setShowChildDropdown] = useState(false);
 
-  // Format Page Title
-  const getPageTitle = () => {
-    switch (currentPage) {
-      case 'home': return 'Home Learning Hub';
-      case 'my-children': return 'My Children Profiles';
-      case 'my-learning': return 'My Learning & Lessons';
-      case 'timetable': return 'Timetable & Planner';
-      case 'subjects': return 'Subjects & Curriculum';
-      case 'assignments': return 'Assignments & Homework';
-      case 'assessments': return 'Assessments & Quizzes';
-      case 'progress': return 'Student Progress Overview';
-      case 'reports': return 'Reports & Insights';
-      case 'resources': return 'Resources Hub';
-      case 'messages': return 'Messages & Communication';
-      case 'settings': return 'Account Settings';
-      case 'safeguarding':
-        return `Safeguarding & Child Protection - ${currentSubpage.charAt(0).toUpperCase() + currentSubpage.slice(1)}`;
-      default: return 'Homeschool Portal';
-    }
-  };
+
 
   return (
     <header className="app-header">
-      {/* Breadcrumb Selector */}
+      {/* Page Title */}
       <div className="header-left">
-        <div className="position-relative">
-          <button 
-            className="breadcrumb-select-trigger"
-            onClick={() => setShowChildDropdown(!showChildDropdown)}
-          >
-            <span>{getPageTitle()}</span>
-            <ChevronDown size={14} />
-          </button>
-
-          {showChildDropdown && (
-            <div 
-              style={{
-                position: 'absolute',
-                top: '40px',
-                left: '0',
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                zIndex: 100,
-                width: '200px',
-                padding: '6px 0'
-              }}
-            >
-              {['All Children', 'Emma - Year 6', 'Liam - Year 4', 'Noah - Year 2'].map((child) => (
-                <button
-                  key={child}
-                  onClick={() => {
-                    setSelectedChild(child);
-                    setShowChildDropdown(false);
-                  }}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    padding: '8px 16px',
-                    textAlign: 'left',
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '0.85rem',
-                    color: selectedChild === child ? '#583fc0' : '#475569',
-                    fontWeight: selectedChild === child ? '600' : 'normal',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {child}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Header Actions */}
@@ -134,7 +66,15 @@ export default function Header({
             />
             <div className="user-info-text">
               <span className="user-name">{loggedInUser}</span>
-              <span className="user-role">Parent</span>
+              <span className="user-role">
+                {userRole === 'SUPER_ADMIN' && 'Super Admin'}
+                {userRole === 'REGIONAL_ADMIN' && 'Regional Admin'}
+                {userRole === 'SCHOOL' && 'School Admin'}
+                {userRole === 'SAFEGUARD' && 'Safeguard Officer'}
+                {userRole && !['SUPER_ADMIN', 'REGIONAL_ADMIN', 'SCHOOL', 'SAFEGUARD'].includes(userRole) && 
+                  userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()
+                }
+              </span>
             </div>
             <ChevronDown size={14} style={{ color: '#94a3b8', marginLeft: '4px' }} />
           </button>

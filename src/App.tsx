@@ -148,6 +148,7 @@ export default function App() {
             selectedChild={selectedChild}
             setSelectedChild={setSelectedChild}
             loggedInUser={loggedInUser}
+            userRole={user?.role}
           />
 
           <div className="app-body">
